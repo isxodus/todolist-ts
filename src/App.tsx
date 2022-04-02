@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import './App.css';
-import {CardType, TaskType, ToDoList} from "./components/ToDoList";
+import {TaskType, ToDoList} from "./components/ToDoList";
 
 export type FilterValueType = 'all' | 'completed' | 'active'
 
@@ -41,13 +41,13 @@ function App() {
         <ToDoList title={"What to learn"}
                   tasks={tasksForToDoList}
                   removeTask={removeTask}
-                  changeFilter={setFilter}
+                  changeFilter={changeFilter}
         />
         {/*<ToDoList title={"Movies to watch"} tasks={list2}/>*/}
         <ToDoList title={"Things to do"}
                   tasks={tasksForToDoList}
                   removeTask={removeTask}
-                  changeFilter={setFilter}
+                  changeFilter={changeFilter}
         />
     </div>
 }
