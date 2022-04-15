@@ -6,6 +6,7 @@ import {v1} from "uuid";
 export type FilterValueType = 'all' | 'completed' | 'active'
 
 function App() {
+
     let initList = [
         {id: v1(), title: "HTML", isDone: true},
         {id: v1(), title: "CSS", isDone: true},
@@ -25,20 +26,22 @@ function App() {
         let resultTasks = tasks.filter((t) => (t.id !== id))
         setTasks(resultTasks)
     }
-    function addTask(title:string,) {
+
+    function addTask(title: string,) {
         let newTask = {id: v1(), title: title, isDone: false}
-        setTasks([...tasks,newTask])
+        setTasks([...tasks, newTask])
     }
-    function changeFilter(value: FilterValueType){
+
+    function changeFilter(value: FilterValueType) {
         setFilter(value)
     }
 
     let tasksForToDoList = tasks
-    if (filter==='completed'){
-        tasksForToDoList = tasks.filter((t) => t.isDone === true)
+    if (filter === 'completed') {
+        tasksForToDoList = tasks.filter((t) => t.isDone)
     }
-    if (filter==='active'){
-        tasksForToDoList = tasks.filter((t) => t.isDone === false)
+    if (filter === 'active') {
+        tasksForToDoList = tasks.filter((t) => !t.isDone)
     }
 
     console.log(initList)
@@ -48,6 +51,7 @@ function App() {
                   addTask={addTask}
                   removeTask={removeTask}
                   changeFilter={changeFilter}
+                  filter={filter}
         />
         {/*<ToDoList title={"Movies to watch"} tasks={list2}/>*/}
         {/*<ToDoList title={"Things to do"}*/}

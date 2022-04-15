@@ -1,0 +1,27 @@
+.cardType {
+    width: 240px;
+    border: solid 1px black;
+    padding: 5px;
+}
+
+
+.inputHandler {
+    display: grid;
+    grid-template-columns: 1fr 25px;
+    grid-template-rows: 22px 15px;
+}
+
+.inputHandlerErrorMessage {
+    color: red;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.doneTask {
+    opacity: 50%;
+}
+
+.activeButton {
+    background-color: #08415C;
+    color: #F1BF98
+}
