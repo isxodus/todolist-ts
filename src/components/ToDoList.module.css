@@ -2,8 +2,12 @@
     width: 240px;
     border: solid 1px black;
     padding: 5px;
+    margin: 5px
 }
 
+h3 {
+    display: inline-block;
+}
 
 .inputHandler {
     display: grid;
