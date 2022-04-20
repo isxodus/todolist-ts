@@ -1,6 +1,7 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React from "react";
 import {FilterValueType} from "../App";
 import css from "./ToDoList.module.css"
+import {UniversalInputArea} from "../componentsUniversal/UniversalInputArea/UniversalInputArea";
 
 
 export type TaskType = {
@@ -22,29 +23,29 @@ export type CardType = {
 
 export function ToDoList(props: CardType) {
     // debugger
-    const [newTaskTitle, setNewTaskTitle] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
-    //add tasks
-    const onChangeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTaskTitle(e.currentTarget.value)
-        setErrorMessage('')
-    }
-    const onKeyPressNewTaskTitleHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === '\n') {
-            props.addTask(props.id, newTaskTitle)
-            setNewTaskTitle('')
-        }
-    }
-    const addTask = () => {
-        debugger
-        if (newTaskTitle === '') {
-            setErrorMessage('You could not create task with empty title')
-            return
-        }
-
-        props.addTask(props.id, newTaskTitle)
-        setNewTaskTitle('')
-    }
+    // const [newTaskTitle, setNewTaskTitle] = useState('')
+    // const [errorMessage, setErrorMessage] = useState('')
+    // //add tasks
+    // const onChangeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    //     setNewTaskTitle(e.currentTarget.value)
+    //     setErrorMessage('')
+    // }
+    // const onKeyPressNewTaskTitleHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    //     if (e.key === '\n') {
+    //         props.addTask(props.id, newTaskTitle)
+    //         setNewTaskTitle('')
+    //     }
+    // }
+    // const addTask = () => {
+    //     // debugger
+    //     if (newTaskTitle === '') {
+    //         setErrorMessage('You could not create task with empty title')
+    //         return
+    //     }
+    //
+    //     props.addTask(props.id, newTaskTitle)
+    //     setNewTaskTitle('')
+    // }
     //filters
     const onAllClickHandler = () => {
         props.changeFilter(props.id, "all")
@@ -58,20 +59,19 @@ export function ToDoList(props: CardType) {
     //show list
 
 
+    const createNewTask = (text: string) => {
+        props.addTask(props.id, text)
+    }
+
     return <div>
         <div className={css.cardType}>
             <div><h3>{props.title}</h3>
                 <button onClick={() => props.removeTodolist(props.id)}>X</button>
             </div>
 
-            <div className={css.inputHandler}>
-                <input value={newTaskTitle}
-                       onChange={onChangeNewTaskTitleHandler}
-                       onKeyPress={onKeyPressNewTaskTitleHandler}
-                />
-                <button onClick={addTask}>+</button>
-                <span className={css.inputHandlerErrorMessage}>{errorMessage}</span>
-            </div>
+            <UniversalInputArea type={"input"} createNewEntityFunction={createNewTask}
+                                noEmptyInput={true} needErrorMessage={true}
+                                placeholders={["create new task", "add smth", "maybe add smth"]}/>
             <div>
                 <button className={props.filter === 'all' ? css.activeButton : ''} onClick={onAllClickHandler}>All</button>
                 <button className={props.filter === 'active' ? css.activeButton : ''} onClick={onActiveClickHandler}>Active</button>

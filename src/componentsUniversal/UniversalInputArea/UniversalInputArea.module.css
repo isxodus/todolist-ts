@@ -1,0 +1,11 @@
+.inputArea {
+    display: grid;
+    grid-template-columns: 1fr 25px;
+    grid-template-rows: 1fr 15px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 12px;
+    font-style: italic;
+}
