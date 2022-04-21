@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, ToDoList} from "./components/ToDoList";
 import {v1} from "uuid";
+import {UniversalInputArea} from "./componentsUniversal/UniversalInputArea/UniversalInputArea";
 
 export type FilterValueType = 'all' | 'completed' | 'active'
 export type TodolistType = {
@@ -38,6 +39,14 @@ function App() {
 
     })
 
+    const createNewTodolist = (todolistName: string) => {
+        const id = v1()
+        const newTodolist: TodolistType = {id: id, title: todolistName, filter: 'all'}
+        setTodolists([newTodolist, ...todolists])
+        setTasks({...tasks, [id]: []})
+    }
+
+
     const changeFilter = (id: string, filter: FilterValueType) => {
         let tempArr: Array<TodolistType> = todolists.map(todolist => {
             if (todolist.id === id) todolist.filter = filter
@@ -52,7 +61,7 @@ function App() {
         setTasks({...tempTasks})
     }
 
-    function addTask(id: string, title: string,) {
+    function addTask(id: string, title: string) {
         let tempTasks = {...tasks}
         let newTask: TaskType = {id: v1(), title: title, isDone: false}
         tempTasks[id] = [...tempTasks[id], newTask]
@@ -62,7 +71,7 @@ function App() {
     const removeTodolist = (id: string) => {
         let tempTodolists = [...todolists]
         tempTodolists = tempTodolists.filter((t) => (t.id !== id))
- 
+
         let tempTasks = {...tasks}
         delete tempTasks[id]
 
@@ -70,9 +79,16 @@ function App() {
         setTasks(tempTasks)
     }
 
+    const editTask = (listId: string, taskId: string, title: string) => {
+        let tempTasks = {...tasks}
+        tempTasks[listId].filter(el => el.id === taskId)[0].title = title
+        setTasks({...tempTasks})
+    }
+
 
     // console.log(initList)
     return <div className="App">
+        <UniversalInputArea type={"input"} onEntityFunction={createNewTodolist} initText={''}/>
         {todolists.map(todolist => {
             let tasksForToDoList = tasks[todolist.id]
             if (todolist.filter === 'completed') {
@@ -81,7 +97,8 @@ function App() {
             if (todolist.filter === 'active') {
                 tasksForToDoList = tasks[todolist.id].filter((t) => !t.isDone)
             }
-            return <ToDoList id={todolist.id}
+            return <ToDoList key={todolist.id}
+                             id={todolist.id}
                              title={todolist.title}
                              tasks={tasksForToDoList}
                              addTask={addTask}
@@ -89,6 +106,7 @@ function App() {
                              changeFilter={changeFilter}
                              filter={todolist.filter}
                              removeTodolist={removeTodolist}
+                             editTask={editTask}
             />
         })}
 

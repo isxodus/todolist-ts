@@ -2,6 +2,7 @@ import React from "react";
 import {FilterValueType} from "../App";
 import css from "./ToDoList.module.css"
 import {UniversalInputArea} from "../componentsUniversal/UniversalInputArea/UniversalInputArea";
+import {UniversalEditableSpan} from "../componentsUniversal/UniversalEditableSpan/UniversalEditableSpan";
 
 
 export type TaskType = {
@@ -19,33 +20,10 @@ export type CardType = {
     changeFilter: (id: string, value: FilterValueType) => void
     filter: FilterValueType
     removeTodolist: (id: string) => void
+    editTask: (listId: string, taskId: string, title: string) => void
 }
 
 export function ToDoList(props: CardType) {
-    // debugger
-    // const [newTaskTitle, setNewTaskTitle] = useState('')
-    // const [errorMessage, setErrorMessage] = useState('')
-    // //add tasks
-    // const onChangeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setNewTaskTitle(e.currentTarget.value)
-    //     setErrorMessage('')
-    // }
-    // const onKeyPressNewTaskTitleHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === '\n') {
-    //         props.addTask(props.id, newTaskTitle)
-    //         setNewTaskTitle('')
-    //     }
-    // }
-    // const addTask = () => {
-    //     // debugger
-    //     if (newTaskTitle === '') {
-    //         setErrorMessage('You could not create task with empty title')
-    //         return
-    //     }
-    //
-    //     props.addTask(props.id, newTaskTitle)
-    //     setNewTaskTitle('')
-    // }
     //filters
     const onAllClickHandler = () => {
         props.changeFilter(props.id, "all")
@@ -63,15 +41,28 @@ export function ToDoList(props: CardType) {
         props.addTask(props.id, text)
     }
 
+
     return <div>
+
         <div className={css.cardType}>
             <div><h3>{props.title}</h3>
                 <button onClick={() => props.removeTodolist(props.id)}>X</button>
             </div>
 
-            <UniversalInputArea type={"input"} createNewEntityFunction={createNewTask}
-                                noEmptyInput={true} needErrorMessage={true}
+            <UniversalInputArea type={"input"} onEntityFunction={createNewTask}
+                                forbidEmptyInput={true} showErrorMessage={true}
                                 placeholders={["create new task", "add smth", "maybe add smth"]}/>
+
+            <UniversalInputArea type={"input"} onEntityFunction={createNewTask} showCancelButton/>
+            <UniversalInputArea type={"textarea"} onEntityFunction={createNewTask} showCancelButton/>
+
+
+            <UniversalInputArea type={"textarea"} onEntityFunction={createNewTask}
+                                showCancelButton={true}
+                                forbidEmptyInput={true} showErrorMessage={true}
+                                placeholders={["create new task", "add smth", "maybe add smth"]}/>
+
+
             <div>
                 <button className={props.filter === 'all' ? css.activeButton : ''} onClick={onAllClickHandler}>All</button>
                 <button className={props.filter === 'active' ? css.activeButton : ''} onClick={onActiveClickHandler}>Active</button>
@@ -80,9 +71,13 @@ export function ToDoList(props: CardType) {
             <ul>
                 {
                     props.tasks.map((task) => {
+                        const onSpanEditTaskFunction = (text: string) => {
+                            props.editTask(props.id, task.id, text)
+                        }
                         const onRemoveTaskHandler = () => props.removeTask(props.id, task.id)
-                        return <li className={task.isDone ? css.doneTask : ''}>
-                            <input type={"checkbox"} checked={task.isDone}/> <span>{task.title}</span>
+                        return <li key={task.id} className={task.isDone ? css.doneTask : ''}>
+                            <input type={"checkbox"} checked={task.isDone}/>
+                            <UniversalEditableSpan text={task.title} onEntityFunction={onSpanEditTaskFunction}/>
                             <button onClick={onRemoveTaskHandler}>x</button>
                         </li>
                     })
@@ -92,3 +87,4 @@ export function ToDoList(props: CardType) {
         </div>
     </div>
 }
+
