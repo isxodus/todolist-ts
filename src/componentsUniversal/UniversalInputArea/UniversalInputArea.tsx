@@ -10,7 +10,7 @@ type KeyInputType = 'both' | 'ctrlEnter' | 'enter'
 
 
 // UNIVERSAL TYPE
-type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAreaPropsType & {
+export type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAreaPropsType & {
     type: UniversalInputAreaTypeType
     onEntityFunction: (newText: string) => void
     //optional input area
@@ -18,7 +18,13 @@ type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAreaProps
     initText?: string
     forbidEmptyInput?: boolean
     //optional buttons
+    /**
+     * Funct for an onBlur event. Hides the main button
+     */
     onBlurFunction?: () => void
+    /**
+     * Text for the main button, if it is shown (onBlurFunction). By default: '+'
+     */
     addButtonText?: string
     showCancelButton?: boolean
     cancelButtonText?: string
@@ -41,9 +47,9 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         forbidEmptyInput,
         //optional buttons
         onBlurFunction,
-        addButtonText,
-        showCancelButton,
-        cancelButtonText,
+        addButtonText = "+",
+        showCancelButton = false,
+        cancelButtonText = "X",
         keyPressMode,
         //optional error message
         showErrorMessage,
@@ -54,15 +60,13 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     const localAutoFocus = autoFocus === undefined ? false : autoFocus
     const localForbidEmptyInput = forbidEmptyInput === undefined ? true : forbidEmptyInput
     //SET CONST BUTTONS
-    const localShowAddButton = !onBlurFunction
-    const localAddButtonText = addButtonText ? addButtonText : "+"
-    const localShowCancelButton = showCancelButton !== undefined
-    const localCancelButtonText = cancelButtonText ? cancelButtonText : "X"
+    console.log(onBlurFunction)
+    const localShowAddButton = onBlurFunction === undefined
     const localKeyPressMode = keyPressMode ? keyPressMode : (type === 'textarea' ? 'ctrlEnter' : 'both')
     //SET CONST ERROR MESSAGE
     const localShowErrorMessage = showErrorMessage === undefined ? true : showErrorMessage
     //SET STYLES
-    const numberOfButtons = [localShowAddButton, localShowCancelButton].filter(Boolean).length
+    const numberOfButtons = [localShowAddButton, showCancelButton].filter(Boolean).length
     const inputAreaStyle = `${css.inputArea} ${css['btn' + (numberOfButtons > 1 ? numberOfButtons + type : numberOfButtons)]} ${localShowErrorMessage ? css.inputAreaShowError : ''}`
     const buttonAreaStyle = numberOfButtons === 2 && type === 'textarea' ? css.buttonAreaBtn2textarea : css.buttonArea
     const cancelButtonStyle = css.cancelButton
@@ -120,8 +124,8 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
                       onBlur={onBlurHandler}/>}
         {/*for buttons*/}
         <div className={buttonAreaStyle}>
-            {localShowAddButton && <button onClick={mainEntityFunctionHandler}>{localAddButtonText}</button>}
-            {localShowCancelButton && <button className={cancelButtonStyle} onClick={onCancelHandler}>{localCancelButtonText}</button>}
+            {localShowAddButton && <button onClick={mainEntityFunctionHandler}>{addButtonText}</button>}
+            {showCancelButton && <button className={cancelButtonStyle} onClick={onCancelHandler}>{cancelButtonText}</button>}
         </div>
 
         {localShowErrorMessage && <span className={css.errorMessage}>{errorText}</span>}

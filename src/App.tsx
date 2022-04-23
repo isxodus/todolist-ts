@@ -11,6 +11,7 @@ export type TodolistType = {
     filter: FilterValueType
 }
 
+
 function App() {
 
     let tdList1 = v1()
@@ -92,10 +93,10 @@ function App() {
         {todolists.map(todolist => {
             let tasksForToDoList = tasks[todolist.id]
             if (todolist.filter === 'completed') {
-                tasksForToDoList = tasks[todolist.id].filter((t) => t.isDone)
+                tasksForToDoList = tasks[todolist.id].filter((t:TaskType) => t.isDone)
             }
             if (todolist.filter === 'active') {
-                tasksForToDoList = tasks[todolist.id].filter((t) => !t.isDone)
+                tasksForToDoList = tasks[todolist.id].filter((t: TaskType) => !t.isDone)
             }
             return <ToDoList key={todolist.id}
                              id={todolist.id}
