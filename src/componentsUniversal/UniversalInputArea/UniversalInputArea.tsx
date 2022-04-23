@@ -52,7 +52,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         cancelButtonText = "X",
         keyPressMode,
         //optional error message
-        showErrorMessage,
+        showErrorMessage=true,
     }) => {
     //SET CONST INPUT BEHAVIOUR
     const [localPlaceholder] = useState(placeholders ? placeholders[Math.floor(Math.random() * placeholders.length)] : placeholder)
@@ -64,10 +64,10 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     const localShowAddButton = onBlurFunction === undefined
     const localKeyPressMode = keyPressMode ? keyPressMode : (type === 'textarea' ? 'ctrlEnter' : 'both')
     //SET CONST ERROR MESSAGE
-    const localShowErrorMessage = showErrorMessage === undefined ? true : showErrorMessage
+    // const localShowErrorMessage = showErrorMessage === undefined ? true : showErrorMessage
     //SET STYLES
     const numberOfButtons = [localShowAddButton, showCancelButton].filter(Boolean).length
-    const inputAreaStyle = `${css.inputArea} ${css['btn' + (numberOfButtons > 1 ? numberOfButtons + type : numberOfButtons)]} ${localShowErrorMessage ? css.inputAreaShowError : ''}`
+    const inputAreaStyle = `${css.inputArea} ${css['btn' + (numberOfButtons > 1 ? numberOfButtons + type : numberOfButtons)]} ${showErrorMessage ? css.inputAreaShowError : ''}`
     const buttonAreaStyle = numberOfButtons === 2 && type === 'textarea' ? css.buttonAreaBtn2textarea : css.buttonArea
     const cancelButtonStyle = css.cancelButton
 
@@ -128,6 +128,6 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
             {showCancelButton && <button className={cancelButtonStyle} onClick={onCancelHandler}>{cancelButtonText}</button>}
         </div>
 
-        {localShowErrorMessage && <span className={css.errorMessage}>{errorText}</span>}
+        {showErrorMessage && <span className={css.errorMessage}>{errorText}</span>}
     </div>
 }
