@@ -60,7 +60,8 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     const localAutoFocus = autoFocus === undefined ? false : autoFocus
     const localForbidEmptyInput = forbidEmptyInput === undefined ? true : forbidEmptyInput
     //SET CONST BUTTONS
-    console.log(onBlurFunction)
+    // console.log(onBlurFunction)
+    // typeof  (onBlurFunction)
     const localShowAddButton = onBlurFunction === undefined
     const localKeyPressMode = keyPressMode ? keyPressMode : (type === 'textarea' ? 'ctrlEnter' : 'both')
     //SET CONST ERROR MESSAGE
