@@ -1,20 +1,25 @@
-.cardType {
-    width: 240px;
-    border: solid 1px black;
-    padding: 5px;
-    margin: 5px
-}
+/*.cardType {*/
+/*    !*width: 340px;*!*/
+/*    border: solid 1px black;*/
+/*    padding: 5px;*/
+/*    margin: 5px*/
+/*}*/
 
-h3 {
-    display: inline-block;
-}
+/*h3 {*/
+/*    display: inline-block;*/
+/*}*/
 
 
-.doneTask {
-    opacity: 50%;
-}
+/*.doneTask {*/
+/*    opacity: 50%;*/
+/*}*/
 
-.activeButton {
-    background-color: #08415C;
-    color: #F1BF98
-}
+/*.activeButton {*/
+/*    background-color: #08415C;*/
+/*    color: #F1BF98*/
+/*}*/
+
+/*.liItems {*/
+/*    display: grid;*/
+/*    grid-template-columns: 35px 1fr 35px;*/
+/*}*/

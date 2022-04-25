@@ -3,6 +3,8 @@ import './App.css';
 import {TaskType, ToDoList} from "./components/ToDoList";
 import {v1} from "uuid";
 import {UniversalInputArea} from "./componentsUniversal/UniversalInputArea/UniversalInputArea";
+import {AppBar, Container, Grid, IconButton, Paper, Toolbar} from "@mui/material";
+import {Menu} from "@mui/icons-material";
 
 export type FilterValueType = 'all' | 'completed' | 'active'
 export type TodolistType = {
@@ -89,34 +91,46 @@ function App() {
 
     // console.log(initList)
     return <div className="App">
-        <UniversalInputArea type={"input"} onEntityFunction={createNewTodolist} initText={''}/>
-        {todolists.map(todolist => {
-            let tasksForToDoList = tasks[todolist.id]
-            if (todolist.filter === 'completed') {
-                tasksForToDoList = tasks[todolist.id].filter((t:TaskType) => t.isDone)
-            }
-            if (todolist.filter === 'active') {
-                tasksForToDoList = tasks[todolist.id].filter((t: TaskType) => !t.isDone)
-            }
-            return <ToDoList key={todolist.id}
-                             id={todolist.id}
-                             title={todolist.title}
-                             tasks={tasksForToDoList}
-                             addTask={addTask}
-                             removeTask={removeTask}
-                             changeFilter={changeFilter}
-                             filter={todolist.filter}
-                             removeTodolist={removeTodolist}
-                             editTask={editTask}
-            />
-        })}
+        <AppBar position={"static"}>
+            <Toolbar>
+                <IconButton>
+                    <Menu/>
+                </IconButton>
 
-        {/*<ToDoList title={"Movies to watch"} tasks={list2}/>*/}
-        {/*<ToDoList title={"Things to do"}*/}
-        {/*          tasks={tasksForToDoList}*/}
-        {/*          removeTask={removeTask}*/}
-        {/*          changeFilter={changeFilter}*/}
-        {/*/>*/}
+            </Toolbar>
+
+        </AppBar>
+        <Container>
+            <Grid container>
+                <UniversalInputArea type={"input"} onEntityFunction={createNewTodolist} initText={''}/>
+            </Grid>
+            <Grid container spacing={3}>
+                {todolists.map(todolist => {
+                    let tasksForToDoList = tasks[todolist.id]
+                    if (todolist.filter === 'completed') {
+                        tasksForToDoList = tasks[todolist.id].filter((t: TaskType) => t.isDone)
+                    }
+                    if (todolist.filter === 'active') {
+                        tasksForToDoList = tasks[todolist.id].filter((t: TaskType) => !t.isDone)
+                    }
+                    return <Grid item>
+                        <Paper elevation={4} style={{padding: "10px"}}>
+                            <ToDoList key={todolist.id}
+                                      id={todolist.id}
+                                      title={todolist.title}
+                                      tasks={tasksForToDoList}
+                                      addTask={addTask}
+                                      removeTask={removeTask}
+                                      changeFilter={changeFilter}
+                                      filter={todolist.filter}
+                                      removeTodolist={removeTodolist}
+                                      editTask={editTask}
+                            />
+                        </Paper>
+                    </Grid>
+                })}
+            </Grid>
+        </Container>
     </div>
 }
 

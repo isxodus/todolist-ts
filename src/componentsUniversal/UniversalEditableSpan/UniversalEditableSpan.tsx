@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {UniversalInputArea} from "../UniversalInputArea/UniversalInputArea";
+import {Box} from "@mui/material";
 
 type UniversalEditableSpanPropsType = {
     text: string
@@ -24,5 +25,5 @@ export function UniversalEditableSpan(props: UniversalEditableSpanPropsType) {
         ? <UniversalInputArea type={'input'} onEntityFunction={onEntityFunctionHandler} initText={props.text}
                               autoFocus={true} onBlurFunction={onBlurHandler}/>
         //<input onBlur={activateEditMode} autoFocus={true} value={props.text}/>
-        : <span onDoubleClick={activateEditMode}>{props.text}</span>
+        : <Box component="div" sx={{ display: 'inline' }} onDoubleClick={activateEditMode}>{props.text}</Box>
 }

@@ -1,5 +1,5 @@
 .inputArea {
-    display: grid;
+    display: grid ;
 
 }
 
@@ -9,16 +9,16 @@
 
 .btn1 {
 
-    grid-template-columns: 1fr 25px;
+    grid-template-columns: 1fr 35px;
 }
 
 .btn2input {
 
-    grid-template-columns: 1fr 50px;
+    grid-template-columns: 1fr 70px;
 }
 
 .btn2textarea {
-    grid-template-columns: 1fr 25px;
+    grid-template-columns: 1fr 35px;
 }
 
 .buttonArea {
@@ -27,19 +27,19 @@
 
 .buttonAreaBtn2textarea {
     display: grid;
-    grid-template-rows: 25px 25px;
+    grid-template-rows: 35px 35px;
 }
 
 .cancelButton {
     grid-row: 1/2;
 }
 
-.inputAreaShowError {
-    grid-template-rows: 1fr 17px;
-}
+/*.inputAreaShowError {*/
+/*    grid-template-rows: 1fr 17px;*/
+/*}*/
 
-.errorMessage {
-    color: red;
-    font-size: 12px;
-    font-style: italic;
-}
+/*.errorMessage {*/
+/*    color: red;*/
+/*    font-size: 12px;*/
+/*    font-style: italic;*/
+/*}*/

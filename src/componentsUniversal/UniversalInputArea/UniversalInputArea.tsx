@@ -1,5 +1,11 @@
 import React, {useState, KeyboardEvent, DetailedHTMLProps, InputHTMLAttributes, TextareaHTMLAttributes, ChangeEvent} from 'react';
 import css from './UniversalInputArea.module.css'
+import {Box, Button, IconButton, TextField} from "@mui/material";
+import {Delete} from "@mui/icons-material";
+import {Add} from '@mui/icons-material';
+
+
+
 
 // DEFAULT PROPS FOR INPUT AND TEXTAREA
 type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
@@ -17,9 +23,11 @@ export type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAr
     placeholders?: Array<string>
     initText?: string
     forbidEmptyInput?: boolean
+    minRows?: number
+    maxRows?: number
     //optional buttons
     /**
-     * Funct for an onBlur event. Hides the main button
+     * Function for an onBlur event. Hides the main button
      */
     onBlurFunction?: () => void
     /**
@@ -42,30 +50,34 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         //optional input area
         placeholders,
         placeholder,
-        initText,
-        autoFocus,
-        forbidEmptyInput,
+        initText = '',
+        autoFocus = false,
+        forbidEmptyInput = true,
+        minRows = 2,
+        maxRows= 4,
         //optional buttons
         onBlurFunction,
-        addButtonText = "+",
+        addButtonText = "",
         showCancelButton = false,
-        cancelButtonText = "X",
+        cancelButtonText = "",
         keyPressMode,
         //optional error message
         showErrorMessage=true,
     }) => {
     //SET CONST INPUT BEHAVIOUR
     const [localPlaceholder] = useState(placeholders ? placeholders[Math.floor(Math.random() * placeholders.length)] : placeholder)
-    const localInitText = initText ? initText : ''
-    const localAutoFocus = autoFocus === undefined ? false : autoFocus
-    const localForbidEmptyInput = forbidEmptyInput === undefined ? true : forbidEmptyInput
     //SET CONST BUTTONS
+
+    //temp playground for
+    // console.log(onBlurFunction?.toString())
+    // console.log(onBlurFunction?.toString()  === `ƒ () {
+    //     return fn.apply(this, arguments);
+    //   }`)
     // console.log(onBlurFunction)
-    // typeof  (onBlurFunction)
+    // console.log(typeof  (onBlurFunction))
+
     const localShowAddButton = onBlurFunction === undefined
     const localKeyPressMode = keyPressMode ? keyPressMode : (type === 'textarea' ? 'ctrlEnter' : 'both')
-    //SET CONST ERROR MESSAGE
-    // const localShowErrorMessage = showErrorMessage === undefined ? true : showErrorMessage
     //SET STYLES
     const numberOfButtons = [localShowAddButton, showCancelButton].filter(Boolean).length
     const inputAreaStyle = `${css.inputArea} ${css['btn' + (numberOfButtons > 1 ? numberOfButtons + type : numberOfButtons)]} ${showErrorMessage ? css.inputAreaShowError : ''}`
@@ -74,7 +86,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
 
 
     //TEXT STATE
-    const [text, setText] = useState(localInitText)
+    const [text, setText] = useState(initText)
     const editTextHandler = (e: ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLInputElement>) => {
         setErrorText('')
         setText(e.currentTarget.value)
@@ -86,17 +98,17 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
 
     //MAIN ENTITY CALLBACK
     const mainEntityFunctionHandler = () => {
-        //errors
-        if (localForbidEmptyInput && text === '') {
+        if (forbidEmptyInput && !text) {
+
             editErrorTextHandler("No empty values are allowed")
             return
         }
-        onEntityFunction(text)
+        if (text) onEntityFunction(text)
         onBlurFunction !== undefined ? onBlurFunction() : setText('')
     }
 
     //KEYPRESS CALLBACK
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLTextAreaElement> | KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLDivElement>) => {
         if ((e.key === '\n' && (localKeyPressMode === 'both' || localKeyPressMode === 'ctrlEnter')) ||
             (e.key === 'Enter' && (localKeyPressMode === 'both' || localKeyPressMode === 'enter'))
         ) {
@@ -105,30 +117,50 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     }
 
     //OTHER CALLBACKS
-    const onCancelHandler = () => setText(localInitText)
+    const onCancelHandler = () => setText(initText)
     const onBlurHandler = () => onBlurFunction ? mainEntityFunctionHandler() : true
 
-    return <div className={inputAreaStyle}>
-        {type === 'input' &&
-            <input value={text}
-                   autoFocus={localAutoFocus}
-                   placeholder={localPlaceholder}
-                   onChange={editTextHandler}
-                   onKeyPress={onKeyPressHandler}
-                   onBlur={onBlurHandler}/>}
-        {type === 'textarea' &&
-            <textarea value={text}
-                      autoFocus={localAutoFocus}
-                      placeholder={localPlaceholder}
-                      onChange={editTextHandler}
-                      onKeyPress={onKeyPressHandler}
-                      onBlur={onBlurHandler}/>}
-        {/*for buttons*/}
-        <div className={buttonAreaStyle}>
-            {localShowAddButton && <button onClick={mainEntityFunctionHandler}>{addButtonText}</button>}
-            {showCancelButton && <button className={cancelButtonStyle} onClick={onCancelHandler}>{cancelButtonText}</button>}
-        </div>
+    //todo variant?
+    //todo onCancelFunction
+    //todo color
 
-        {showErrorMessage && <span className={css.errorMessage}>{errorText}</span>}
-    </div>
+    return <Box className={inputAreaStyle}>
+        {type === 'input' &&
+            <TextField variant={"standard"}
+                    value={text}
+                    autoFocus={autoFocus}
+                    placeholder={localPlaceholder}
+                    error={!!errorText}
+                    helperText={errorText}
+                    onChange={editTextHandler}
+                    onKeyPress={onKeyPressHandler}
+                    onBlur={onBlurHandler}/>}
+        {type === 'textarea' &&
+            <TextField variant={"standard"}
+                    value={text}
+                    autoFocus={autoFocus}
+                    placeholder={localPlaceholder}
+                    error={!!errorText}
+                    helperText={errorText}
+                    onChange={editTextHandler}
+                    onKeyPress={onKeyPressHandler}
+                    onBlur={onBlurHandler}
+                    multiline
+                    minRows={minRows}
+                    maxRows={maxRows}/>}
+        {/*for buttons*/}
+        <Box className={buttonAreaStyle}>
+            {localShowAddButton &&
+                (addButtonText && cancelButtonText
+                    ? <Button variant="outlined" startIcon={<Add />} onClick={mainEntityFunctionHandler}>{addButtonText}</Button>
+                    : <IconButton aria-label="delete" onClick={mainEntityFunctionHandler}><Add /></IconButton>
+                )}
+
+            {showCancelButton &&
+                (addButtonText && cancelButtonText
+                    ? <Button variant="outlined" startIcon={<Delete />} className={cancelButtonStyle} onClick={onCancelHandler}>{cancelButtonText}</Button>
+                    : <IconButton className={cancelButtonStyle} onClick={onCancelHandler}><Delete /></IconButton>
+                )}
+        </Box>
+    </Box>
 }
