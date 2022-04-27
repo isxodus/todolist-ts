@@ -2,37 +2,79 @@ import React from 'react';
 import {UniversalInputArea, UniversalInputAreaPropsType} from "./UniversalInputArea";
 import {action} from "@storybook/addon-actions";
 import {Story} from "@storybook/react";
+import {Box, Container, Grid, Paper, Typography} from "@mui/material";
 
 export default {
-    title: "UniversalInputArea",
+    title: "Universal Components/UniversalInputArea",
     component: UniversalInputArea,
 }
-
-const Template: Story<UniversalInputAreaPropsType> = (args) => <UniversalInputArea {...args}/>
-const actionCallback = action('onEntityFunction was called')
-const onBlurCallback = action('onEntityFunction was called')
-
-//for some reason you dont get undefined for ? attrs
-export const DefaultAreas = Template.bind({})
-DefaultAreas.args = {
-    type: 'input',
-    onEntityFunction: actionCallback,
-    // onBlurFunction: undefined
-}
+const actionCallback = action('onEntityCallback was called')
+const onBlurCallback = action('onBlurCallback was called')
 
 
-//action callback does not work
-export const DefaultInput2 = () => <div>
-    <UniversalInputArea type={'input'} onEntityFunction={actionCallback}/>
+export const BasicScenario = () => <div>
+    <Box padding={2}>
+        <Typography variant="h3" gutterBottom component="div" padding={1}>
+            UniversalInputArea
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+            A universal area with buttons, that could take only two parameters:
+            <ul>
+                <li>type : 'textarea' | 'input'</li>
+                <li>onEntityFunction: (newText: string) {'=>'} void</li>
+            </ul>
+            However, there are plenty of optional ones to fullfill different needs. This Component is used in other Universal Components
+
+        </Typography>
+        <Grid container>
+            <Grid item xs={6} paddingRight={1}>
+                <Paper elevation={3}>
+                    <Box padding={1}>
+                        <Typography variant="h6" gutterBottom component="div" padding={1}>
+                            This is a default INPUT area
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            <div>For Textarea Enter and Ctrl+Enter are available by default</div>
+                        </Typography>
+                        <UniversalInputArea type={'input'} onEntityFunction={actionCallback}/>
+                    </Box>
+                </Paper>
+            </Grid>
+            <Grid item xs={6} paddingLeft={1}>
+                <Paper elevation={3}>
+                    <Box padding={1}>
+                        <Typography variant="h6" gutterBottom component="div" padding={1}>
+                            This is a default TEXTEAREA area
+                        </Typography>
+                        <Typography variant="body1" gutterBottom>
+                            <div>For Textarea Enter is not available by default, only Ctrl+Enter</div>
+                            <div>Height is 3 rows by default (match 2 buttons height)</div>
+                            <div>Height could extend up to 4 rows by default</div>
+                        </Typography>
+                        <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback}/>
+                    </Box>
+                </Paper>
+            </Grid>
+        </Grid>
+
+    </Box>
 
 </div>
 
 
-export const DefaultInput = () => <div><UniversalInputArea type={'input'} onEntityFunction={actionCallback}/>
-    <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} addButtonText={"A"}/>
+export const PlaygroundForInputTODO = () => <div><UniversalInputArea type={'input'} onEntityFunction={actionCallback}/>
+    <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} addButtonText={"A"} showCancelButton={true}/>
     <UniversalInputArea type={'input'} onEntityFunction={actionCallback} onBlurFunction={() => alert(1)}
                         showCancelButton={true}
 
                         addButtonText={"A"}/>
 
 </div>
+
+//PLAYGROUND ELEMENT
+const Template: Story<UniversalInputAreaPropsType> = (args) => <UniversalInputArea {...args}/>
+export const TemplateInputArea = Template.bind({})
+TemplateInputArea.args = {
+    type: 'input',
+    onEntityFunction: actionCallback,
+}
