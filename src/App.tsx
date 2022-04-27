@@ -5,22 +5,20 @@ import {v1} from "uuid";
 import {UniversalInputArea} from "./componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {AppBar, Container, Grid, IconButton, Paper, Toolbar} from "@mui/material";
 import {Menu} from "@mui/icons-material";
-
-export type FilterValueType = 'all' | 'completed' | 'active'
-export type TodolistType = {
-    id: string
-    title: string
-    filter: FilterValueType
-}
+import {CreateTodolistAC, FilterValueType, RemoveTodolistAC, todolistsReducer, TodolistType} from "./state/todolists-reducer";
 
 
 function App() {
-
+    //TODO second reducer
+    //TODO make more components
+    //TODO make more univarsal components like list with checkboxes and checkboxes themselves
     let tdList1 = v1()
     let tdList2 = v1()
+
     let [todolists, setTodolists] = useState<Array<TodolistType>>([
             {id: tdList1, title: "What to learn", filter: "active"},
             {id: tdList2, title: "What to buy", filter: "all"},
+
         ]
     )
 
@@ -41,13 +39,6 @@ function App() {
         ]
 
     })
-
-    const createNewTodolist = (todolistName: string) => {
-        const id = v1()
-        const newTodolist: TodolistType = {id: id, title: todolistName, filter: 'all'}
-        setTodolists([newTodolist, ...todolists])
-        setTasks({...tasks, [id]: []})
-    }
 
 
     const changeFilter = (id: string, filter: FilterValueType) => {
@@ -71,16 +62,6 @@ function App() {
         setTasks({...tempTasks})
     }
 
-    const removeTodolist = (id: string) => {
-        let tempTodolists = [...todolists]
-        tempTodolists = tempTodolists.filter((t) => (t.id !== id))
-
-        let tempTasks = {...tasks}
-        delete tempTasks[id]
-
-        setTodolists(tempTodolists)
-        setTasks(tempTasks)
-    }
 
     const editTask = (listId: string, taskId: string, title: string) => {
         let tempTasks = {...tasks}
@@ -88,6 +69,16 @@ function App() {
         setTasks({...tempTasks})
     }
 
+    const createTodolistHandler = (title: string) => {
+        console.log(todolists)
+        let a: Array<TodolistType> = todolistsReducer(todolists, CreateTodolistAC(title))
+        console.log(a)
+        debugger
+        setTodolists(a)
+    }
+    const removeTodolistHandler = (id: string) => {
+        todolistsReducer(todolists, RemoveTodolistAC(id))
+    }
 
     // console.log(initList)
     return <div className="App">
@@ -102,7 +93,7 @@ function App() {
         </AppBar>
         <Container>
             <Grid container>
-                <UniversalInputArea type={"input"} onEntityFunction={createNewTodolist} initText={''}/>
+                <UniversalInputArea type={"input"} onEntityFunction={createTodolistHandler} initText={''}/>
             </Grid>
             <Grid container spacing={3}>
                 {todolists.map(todolist => {
@@ -123,7 +114,7 @@ function App() {
                                       removeTask={removeTask}
                                       changeFilter={changeFilter}
                                       filter={todolist.filter}
-                                      removeTodolist={removeTodolist}
+                                      removeTodolist={removeTodolistHandler}
                                       editTask={editTask}
                             />
                         </Paper>

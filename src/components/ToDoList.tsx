@@ -1,10 +1,11 @@
 import React from "react";
-import {FilterValueType} from "../App";
+
 import css from "./ToDoList.module.css"
 import {UniversalInputArea} from "../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalEditableSpan} from "../componentsUniversal/UniversalEditableSpan/UniversalEditableSpan";
-import {Box, Button, Checkbox, IconButton} from "@mui/material";
+import {Box, Button, Checkbox, Grid, IconButton, List, ListItem, ListItemButton, Typography} from "@mui/material";
 import {Delete} from "@mui/icons-material";
+import {FilterValueType} from "../state/todolists-reducer";
 
 
 export type TaskType = {
@@ -47,7 +48,24 @@ export function ToDoList(props: CardType) {
     return <div>
 
         <div className={css.cardType}>
-            <div><span><b>{props.title}</b></span> <IconButton onClick={() => props.removeTodolist(props.id)}><Delete/></IconButton></div>
+            <Grid className={css.inputArea}>
+                {/*<List>*/}
+                {/*    <ListItem disablePadding>*/}
+                {/*<ListItemButton>*/}
+
+                <UniversalEditableSpan text={props.title} onEntityFunction={() => true}/>
+
+                <IconButton onClick={() => props.removeTodolist(props.id)}><Delete/></IconButton>
+
+                {/*<ListItemIcon>*/}
+                {/*    <InboxIcon />*/}
+                {/*</ListItemIcon>*/}
+                {/*<ListItemText primary="Inbox" />*/}
+                {/*</ListItemButton>*/}
+                {/*    </ListItem>*/}
+                {/*</List>*/}
+            </Grid>
+
 
             <UniversalInputArea type={"input"} onEntityFunction={createNewTask} placeholders={["create new task", "add smth", "maybe add smth"]}/>
             {/*<UniversalInputArea type={"input"} onEntityFunction={createNewTask}*/}
@@ -71,7 +89,7 @@ export function ToDoList(props: CardType) {
             </div>
             <div>
                 {
-                    props.tasks.map((task) => {
+                    props.tasks?.map((task) => {
                         const onSpanEditTaskFunction = (text: string) => {
                             props.editTask(props.id, task.id, text)
                         }
