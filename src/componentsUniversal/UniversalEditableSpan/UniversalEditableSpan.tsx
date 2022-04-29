@@ -1,32 +1,31 @@
 import React, {useState} from "react";
-import css from './UniversalEditableSpan.module.css'
+import {TextField} from "@mui/material";
 import {UniversalInputArea} from "../UniversalInputArea/UniversalInputArea";
-import {Box, TextField} from "@mui/material";
 
 
-//
-// // DEFAULT PROPS FOR INPUT AND TEXTAREA
-// type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLSpanElement>, HTMLInputElement>
-// type DefaultTextAreaPropsType = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
-// // TYPES
-// type UniversalInputAreaTypeType = 'textarea' | 'input'
-// type KeyInputType = 'both' | 'ctrlEnter' | 'enter'
+// DEFAULT PROPS
+
+// LOCAL TYPES
 
 
+// UNIVERSAL TYPE
 type UniversalEditableSpanPropsType = {
     text: string
     onEntityFunction: (newText: string) => void
 }
 
+
+// COMPONENT
 export function UniversalEditableSpan(props: UniversalEditableSpanPropsType) {
     const [editMode, setEditMode] = useState(false)
     const activateEditMode = () => setEditMode(!editMode)
+    //onst [localText, setLocalText] = useState(props.text)
+    // useEffect(() => (setLocalText(props.text)), [props.text])
 
     //main callback
     const onEntityFunctionHandler = (text: string) => props.onEntityFunction(text)
     //onblur callback
     const onBlurHandler = () => activateEditMode()
-
     return editMode
         ? <UniversalInputArea type={'input'} initText={props.text} onEntityFunction={onEntityFunctionHandler}
                               autoFocus={true} onBlurFunction={onBlurHandler}/>

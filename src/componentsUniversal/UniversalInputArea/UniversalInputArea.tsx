@@ -1,14 +1,13 @@
-import React, {useState, KeyboardEvent, DetailedHTMLProps, InputHTMLAttributes, TextareaHTMLAttributes, ChangeEvent} from 'react';
+import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent, TextareaHTMLAttributes, useEffect, useState} from 'react';
 import css from './UniversalInputArea.module.css'
-import {Box, Button, IconButton, TextField} from "@mui/material";
-import {Delete} from "@mui/icons-material";
-import {Add} from '@mui/icons-material';
+import {Box, TextField} from "@mui/material";
+import {UniversalButton} from "../UniversalButton/UniversalButton";
 
 
-// DEFAULT PROPS FOR INPUT AND TEXTAREA
+// DEFAULT PROPS
 type DefaultInputPropsType = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 type DefaultTextAreaPropsType = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>
-// TYPES
+// LOCAL TYPES
 type UniversalInputAreaTypeType = 'textarea' | 'input'
 type KeyInputType = 'both' | 'ctrlEnter' | 'enter'
 
@@ -17,6 +16,7 @@ type KeyInputType = 'both' | 'ctrlEnter' | 'enter'
 export type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAreaPropsType & {
     type: UniversalInputAreaTypeType
     onEntityFunction: (newText: string) => void
+    onCancelFunction?: () => void
     //optional input area
     placeholders?: Array<string>
     initText?: string
@@ -45,6 +45,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     {
         type,
         onEntityFunction,
+        onCancelFunction,
         //optional input area
         placeholders,
         placeholder,
@@ -62,11 +63,16 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         //optional error message
         showErrorMessage = true,
     }) => {
+    //todo muiVariant? + button muiVariant
+    //todo muiColor
+
+
     //SET CONST INPUT BEHAVIOUR
     const [localPlaceholder] = useState(placeholders ? placeholders[Math.floor(Math.random() * placeholders.length)] : placeholder)
     //SET CONST BUTTONS
     //string just for storybook params
     const StorybookString = "\"function () {\\n        return fn.apply(this, arguments);\\n      }\""
+    if (JSON.stringify(onCancelFunction?.toString()) === StorybookString) onCancelFunction = undefined
     if (JSON.stringify(onBlurFunction?.toString()) === StorybookString) onBlurFunction = undefined
     const localShowAddButton = onBlurFunction === undefined
     const localKeyPressMode = keyPressMode ? keyPressMode : (type === 'textarea' ? 'ctrlEnter' : 'both')
@@ -76,10 +82,9 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     const buttonAreaStyle = numberOfButtons === 2 && type === 'textarea' ? css.buttonAreaBtn2textarea : css.buttonArea
     const cancelButtonStyle = css.cancelButton
 
-
     //TEXT STATE
-    console.log(initText)
     const [text, setText] = useState(initText)
+    useEffect(() => (setText(initText)), [initText])
     const editTextHandler = (e: ChangeEvent<HTMLTextAreaElement> | ChangeEvent<HTMLInputElement>) => {
         setErrorText('')
         setText(e.currentTarget.value)
@@ -92,7 +97,6 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     //MAIN ENTITY CALLBACK
     const mainEntityFunctionHandler = () => {
         if (forbidEmptyInput && !text) {
-
             editErrorTextHandler("No empty values are allowed")
             return
         }
@@ -107,15 +111,13 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         ) {
             mainEntityFunctionHandler()
         }
+        if (e.key === 'Escape') onCancelHandler()
     }
 
     //OTHER CALLBACKS
-    const onCancelHandler = () => setText(initText)
+    const onCancelHandler = () => onCancelFunction ? onCancelFunction() : setText(initText)
     const onBlurHandler = () => onBlurFunction ? mainEntityFunctionHandler() : true
 
-    //todo variant?
-    //todo onCancelFunction On ESC
-    //todo color
 
     return <Box className={inputAreaStyle}>
         {type === 'input' &&
@@ -126,7 +128,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
                        error={!!errorText}
                        helperText={errorText}
                        onChange={editTextHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyUp={onKeyPressHandler}
                        onBlur={onBlurHandler}/>}
         {type === 'textarea' &&
             <TextField variant={"standard"}
@@ -136,25 +138,17 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
                        error={!!errorText}
                        helperText={errorText}
                        onChange={editTextHandler}
-                       onKeyPress={onKeyPressHandler}
+                       onKeyUp={onKeyPressHandler}
                        onBlur={onBlurHandler}
                        multiline
                        minRows={minRows}
                        maxRows={maxRows}/>}
         {/*for buttons*/}
         <Box className={buttonAreaStyle}>
-            {localShowAddButton &&
-                (addButtonText && cancelButtonText
-                        ? <Button variant="outlined" startIcon={<Add/>} onClick={mainEntityFunctionHandler}>{addButtonText}</Button>
-                        : <IconButton aria-label="delete" onClick={mainEntityFunctionHandler}><Add/></IconButton>
-                )}
-
+            {localShowAddButton && <UniversalButton onEntityFunction={mainEntityFunctionHandler} muiIcon={'add'} buttonText={addButtonText}/>}
             {showCancelButton &&
-                (addButtonText && cancelButtonText
-                        ? <Button variant="outlined" startIcon={<Delete/>} className={cancelButtonStyle}
-                                  onClick={onCancelHandler}>{cancelButtonText}</Button>
-                        : <IconButton className={cancelButtonStyle} onClick={onCancelHandler}><Delete/></IconButton>
-                )}
+                <div className={cancelButtonStyle}>
+                    <UniversalButton onEntityFunction={onCancelHandler} muiIcon={'delete'} buttonText={cancelButtonText}/></div>}
         </Box>
     </Box>
 }
