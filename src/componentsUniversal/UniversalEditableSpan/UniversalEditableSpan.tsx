@@ -9,7 +9,7 @@ import {UniversalInputArea} from "../UniversalInputArea/UniversalInputArea";
 
 
 // UNIVERSAL TYPE
-type UniversalEditableSpanPropsType = {
+export type UniversalEditableSpanPropsType = {
     text: string
     onEntityFunction: (newText: string) => void
 }

@@ -1,8 +1,8 @@
 import React from 'react';
-import {UniversalInputArea, UniversalInputAreaPropsType} from "./UniversalInputArea";
 import {action} from "@storybook/addon-actions";
 import {Story} from "@storybook/react";
 import {Box, Grid, Paper, Typography} from "@mui/material";
+import {UniversalInputArea, UniversalInputAreaPropsType} from "./UniversalInputArea";
 
 export default {
     title: "Universal Components/UniversalInputArea",
@@ -60,6 +60,15 @@ export const BasicScenario = () => <div>
 </div>
 
 export const PlaygroundForInputMer = () => <div>
+    <div className="mermaid">
+        {`graph TD
+            A[Client] --> B[Load Balancer]
+            B --> C[Server01]
+            B --> D[Server02]`}
+    </div>
+</div>
+
+export const Basics = () => <div>
     <div className="mermaid">
         {`graph TD
             A[Client] --> B[Load Balancer]
