@@ -26,7 +26,7 @@ export type  UniversalListPropsType = {
 
 
 // COMPONENT
-export const UniversalList: React.FC<UniversalListPropsType> = (
+const UniversalListHidden: React.FC<UniversalListPropsType> = (
     {
         inputArr,
         onCheckHandler,
@@ -51,3 +51,4 @@ export const UniversalList: React.FC<UniversalListPropsType> = (
         })}
     </Box>
 }
+export const UniversalList = React.memo(UniversalListHidden)

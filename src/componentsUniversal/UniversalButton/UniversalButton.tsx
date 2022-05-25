@@ -18,7 +18,7 @@ export type  UniversalButtonPropsType = DefaultButtonPropsType & {
 
 
 // COMPONENT
-export const UniversalButton: React.FC<UniversalButtonPropsType> = (
+const UniversalButtonHidden: React.FC<UniversalButtonPropsType> = (
     {
         onEntityFunction,
         buttonText = '',
@@ -46,5 +46,5 @@ export const UniversalButton: React.FC<UniversalButtonPropsType> = (
             : <IconButton onClick={onEntityFunction}>{localIcon}</IconButton>
         }
     </>
-
 }
+export const UniversalButton = React.memo(UniversalButtonHidden)

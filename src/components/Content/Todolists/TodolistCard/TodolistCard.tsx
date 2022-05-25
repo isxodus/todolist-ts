@@ -15,7 +15,7 @@ export type TodolistCardPropsType = {
     defaultFilterValue: FilterValueType
 }
 
-export function TodolistCard(props: TodolistCardPropsType) {
+function TodolistCardHidden(props: TodolistCardPropsType) {
     const dispatch = useDispatch()
     const funnyPlaceholders = ["create new task", "type something", "type something cool"]
 
@@ -51,4 +51,4 @@ export function TodolistCard(props: TodolistCardPropsType) {
                        onRemoveHandler={onRemoveTaskHandler}/>
     </Box>
 }
-
+export const TodolistCard = React.memo(TodolistCardHidden)

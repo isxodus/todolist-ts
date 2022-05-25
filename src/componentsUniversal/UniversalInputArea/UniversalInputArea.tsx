@@ -65,7 +65,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     }) => {
     //todo muiVariant? + button muiVariant
     //todo muiColor
-
+    console.log('universalInput was rendered:',initText)
 
     //SET CONST INPUT BEHAVIOUR
     const [localPlaceholder] = useState(placeholders ? placeholders[Math.floor(Math.random() * placeholders.length)] : placeholder)

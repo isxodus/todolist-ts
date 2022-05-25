@@ -16,10 +16,12 @@ export type UniversalEditableSpanPropsType = {
 
 
 // COMPONENT
-export function UniversalEditableSpan(props: UniversalEditableSpanPropsType) {
+function UniversalEditableSpanHidden(props: UniversalEditableSpanPropsType) {
+    console.log('UniversalEditableSpan was rendered:',props.text)
+
     const [editMode, setEditMode] = useState(false)
     const activateEditMode = () => setEditMode(!editMode)
-    //onst [localText, setLocalText] = useState(props.text)
+    //const [localText, setLocalText] = useState(props.text)
     // useEffect(() => (setLocalText(props.text)), [props.text])
 
     //main callback
@@ -33,3 +35,4 @@ export function UniversalEditableSpan(props: UniversalEditableSpanPropsType) {
                      InputProps={{disableUnderline: true, color: 'primary'}}
                      sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>
 }
+export const UniversalEditableSpan = React.memo(UniversalEditableSpanHidden)

@@ -17,7 +17,7 @@ export type  UniversalButtonPropsType = DefaultButtonPropsType & {
 
 
 // COMPONENT
-export const UniversalButtonSet: React.FC<UniversalButtonPropsType> = (
+const UniversalButtonSetHidden: React.FC<UniversalButtonPropsType> = (
     {
         buttonArray,
         onEntityFunction,
@@ -30,6 +30,5 @@ export const UniversalButtonSet: React.FC<UniversalButtonPropsType> = (
                                     buttonText={el}/>
         })}
     </ButtonGroup>
-
-
 }
+export const UniversalButtonSet = React.memo(UniversalButtonSetHidden)
