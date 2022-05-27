@@ -110,7 +110,7 @@ const UniversalInputAreaHidden: React.FC<UniversalInputAreaPropsType> = (
         }
         if (text) onEntityFunction(text)
         onBlurFunction !== undefined ? onBlurFunction() : setText('')
-    },[])
+    },[text])
     const onCancelHandler = useCallback(() => onCancelFunction ? onCancelFunction() : setText(initText),[])
 
     //KEYPRESS CALLBACK

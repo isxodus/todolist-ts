@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "../../../state/store";
@@ -14,7 +14,7 @@ export function Todolists() {
     const todolists = useSelector<AppRootState, Array<TodolistType>>(state => state.todolists)
     const tasks = useSelector<AppRootState, TaskArrayType>(state => state.tasks)
 
-    const createTodolistHandler = (title: string) => dispatch(CreateTodolistAC(title))
+    const createTodolistHandler = useCallback((title: string) => dispatch(CreateTodolistAC(title)),[])
 
 
     return <Container>
