@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import css from './UniversalList.module.css'
 import {Box} from "@mui/material";
 import {UniversalCheckbox} from "../UniversalCheckbox/UniversalCheckbox";
@@ -26,6 +26,10 @@ export type  UniversalListPropsType = {
 
 
 // COMPONENT
+const ListElem = () => {
+
+}
+
 const UniversalListHidden: React.FC<UniversalListPropsType> = (
     {
         inputArr,
@@ -37,9 +41,10 @@ const UniversalListHidden: React.FC<UniversalListPropsType> = (
         titleKey = 'title',
         checkboxKey = 'isDone'
     }) => {
+    console.log('UniversalList was rendered')
     return <Box>
         {inputArr?.map((elem) => {
-            const checkboxHandler = () => onCheckHandler(elem[idKey])
+            const checkboxHandler =() => onCheckHandler(elem[idKey])
             const spanHandler = (newText: string) => onEditHandler(elem[idKey], newText)
             const deleteHandler = () => onRemoveHandler(elem[idKey])
 

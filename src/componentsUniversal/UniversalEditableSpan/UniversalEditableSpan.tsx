@@ -17,7 +17,7 @@ export type UniversalEditableSpanPropsType = {
 
 // COMPONENT
 function UniversalEditableSpanHidden(props: UniversalEditableSpanPropsType) {
-    console.log('UniversalEditableSpan was rendered:',props.text)
+
 
     const [editMode, setEditMode] = useState(false)
     const activateEditMode = () => setEditMode(!editMode)
@@ -28,6 +28,9 @@ function UniversalEditableSpanHidden(props: UniversalEditableSpanPropsType) {
     const onEntityFunctionHandler = (text: string) => props.onEntityFunction(text)
     //onblur callback
     const onBlurHandler = () => activateEditMode()
+
+
+    console.log('UniversalEditableSpan was rendered:',props.text)
     return editMode
         ? <UniversalInputArea type={'input'} initText={props.text} onEntityFunction={onEntityFunctionHandler}
                               autoFocus={true} onBlurFunction={onBlurHandler}/>

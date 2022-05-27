@@ -20,7 +20,7 @@ const UniversalCheckboxHidden: React.FC<UniversalCheckboxPropsType> = (
         checked,
         handler
     }) => {
-    //console.log('UniversalCheckbox was rendered')
+    console.log('UniversalCheckbox was rendered')
     return <Checkbox checked={checked} onChange={handler}/>
 }
 export const UniversalCheckbox = React.memo(UniversalCheckboxHidden)

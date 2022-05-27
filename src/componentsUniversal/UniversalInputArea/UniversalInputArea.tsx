@@ -1,4 +1,13 @@
-import React, {ChangeEvent, DetailedHTMLProps, InputHTMLAttributes, KeyboardEvent, TextareaHTMLAttributes, useEffect, useState} from 'react';
+import React, {
+    ChangeEvent,
+    DetailedHTMLProps,
+    InputHTMLAttributes,
+    KeyboardEvent,
+    TextareaHTMLAttributes,
+    useCallback,
+    useEffect, useMemo,
+    useState
+} from 'react';
 import css from './UniversalInputArea.module.css'
 import {Box, TextField} from "@mui/material";
 import {UniversalButton} from "../UniversalButton/UniversalButton";
@@ -41,7 +50,7 @@ export type  UniversalInputAreaPropsType = DefaultInputPropsType & DefaultTextAr
 
 
 // COMPONENT
-export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
+const UniversalInputAreaHidden: React.FC<UniversalInputAreaPropsType> = (
     {
         type,
         onEntityFunction,
@@ -65,7 +74,6 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     }) => {
     //todo muiVariant? + button muiVariant
     //todo muiColor
-    console.log('universalInput was rendered:',initText)
 
     //SET CONST INPUT BEHAVIOUR
     const [localPlaceholder] = useState(placeholders ? placeholders[Math.floor(Math.random() * placeholders.length)] : placeholder)
@@ -94,15 +102,16 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     const [errorText, setErrorText] = useState('')
     const editErrorTextHandler = (text: string) => setErrorText(text)
 
-    //MAIN ENTITY CALLBACK
-    const mainEntityFunctionHandler = () => {
+    //BUTTON CALLBACKS
+    const mainEntityFunctionHandler = useCallback(() => {
         if (forbidEmptyInput && !text) {
             editErrorTextHandler("No empty values are allowed")
             return
         }
         if (text) onEntityFunction(text)
         onBlurFunction !== undefined ? onBlurFunction() : setText('')
-    }
+    },[])
+    const onCancelHandler = useCallback(() => onCancelFunction ? onCancelFunction() : setText(initText),[])
 
     //KEYPRESS CALLBACK
     const onKeyPressHandler = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -115,10 +124,11 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
     }
 
     //OTHER CALLBACKS
-    const onCancelHandler = () => onCancelFunction ? onCancelFunction() : setText(initText)
+
     const onBlurHandler = () => onBlurFunction ? mainEntityFunctionHandler() : true
 
 
+    console.log('UniversalInputArea was rendered with initText:',initText)
     return <Box className={inputAreaStyle}>
         {type === 'input' &&
             <TextField variant={"standard"}
@@ -152,3 +162,4 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = (
         </Box>
     </Box>
 }
+export const UniversalInputArea = React.memo (UniversalInputAreaHidden)

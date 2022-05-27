@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useCallback, useMemo, useReducer} from "react";
 import css from "./TodolistCard.module.css"
 import {Box} from "@mui/material";
 import {useDispatch} from "react-redux";
@@ -17,23 +17,28 @@ export type TodolistCardPropsType = {
 
 function TodolistCardHidden(props: TodolistCardPropsType) {
     const dispatch = useDispatch()
-    const funnyPlaceholders = ["create new task", "type something", "type something cool"]
+    const funnyPlaceholders = useMemo(() =>  ["create new task", "type something", "type something cool"],[])
+
 
     //TODOLIST HANDLERS
     const onChangeTodolistTitleHandler = (tdId: string, title: string) => dispatch(ChangeTodolistTitleAC(tdId, title))
-    const filterValueArr = ['all', 'active', 'completed']
-    const onChangeFilter = (filterValue: FilterValueType) => dispatch(ChangeTodolistFilterAC(props.tdId, filterValue))
     const onRemoveTodolistHandler = (tdId: string) => dispatch(RemoveTodolistAC(tdId))
+    //FILTER COMPONENT
+    const filterValueArr = useMemo(() => ['all', 'active', 'completed'],[])
+    const onChangeFilter = useCallback((filterValue: FilterValueType) => dispatch(ChangeTodolistFilterAC(props.tdId, filterValue)),[])
+
     ///TASK HANDLERS
-    const onCreateTaskHandler = (title: string) => dispatch(AddTaskAC(props.tdId, title))
+
+    const OnCreateTaskHandler = useCallback( (title: string) => dispatch(AddTaskAC(props.tdId, title)),[])
     const onChangeTaskTitleHandler = (taskId: string, title: string) => dispatch(ChangeTaskTitleAC(props.tdId, taskId, title))
     const onChangeTaskStatusHandler = (taskId: string) => dispatch(ChangeTaskStatusAC(props.tdId, taskId))
     const onRemoveTaskHandler = (taskId: string) => dispatch(RemoveTaskAC(props.tdId, taskId))
 
+    const inputForHeader = [{id: props.tdId, title: props.title}]
 
     return <Box className={css.cardType}>
         {/*TODOLIST TITLE*/}
-        <UniversalList inputArr={[{id: props.tdId, title: props.title}]} showCheckbox={false}
+        <UniversalList inputArr={inputForHeader} showCheckbox={false}
                        onCheckHandler={() => true} onEditHandler={onChangeTodolistTitleHandler}
                        onRemoveHandler={onRemoveTodolistHandler}/>
         {/*Instead of one below, I tried to use a UniversalList with one item */}
@@ -42,7 +47,7 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
         {/*    <IconButton onClick={() => props.removeTodolist(props.tdId)}><Delete/></IconButton>*/}
         {/*</Grid>*/}
         {/*CREATE NEW TASK*/}
-        <UniversalInputArea type={"input"} onEntityFunction={onCreateTaskHandler} placeholders={funnyPlaceholders}/>
+        <UniversalInputArea type={"input"} onEntityFunction={OnCreateTaskHandler} placeholders={funnyPlaceholders}/>
         {/*FILTERS*/}
         <UniversalButtonSet buttonArray={filterValueArr} onEntityFunction={onChangeFilter} defaultFilter={props.defaultFilterValue}/>
         {/*TASK LIST*/}

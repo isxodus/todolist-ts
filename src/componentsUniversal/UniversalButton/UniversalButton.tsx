@@ -18,7 +18,7 @@ export type  UniversalButtonPropsType = DefaultButtonPropsType & {
 
 
 // COMPONENT
-const UniversalButtonHidden: React.FC<UniversalButtonPropsType> = (
+const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
     {
         onEntityFunction,
         buttonText = '',
@@ -39,7 +39,7 @@ const UniversalButtonHidden: React.FC<UniversalButtonPropsType> = (
     }
     const localIcon = getIcon()
 
-
+    console.log('UniversalButton was rendered')
     return <>
         {buttonText
             ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}>{buttonText}</Button>
@@ -47,4 +47,4 @@ const UniversalButtonHidden: React.FC<UniversalButtonPropsType> = (
         }
     </>
 }
-export const UniversalButton = React.memo(UniversalButtonHidden)
+export const UniversalButton = React.memo(UniversalButtonNoMemo)
