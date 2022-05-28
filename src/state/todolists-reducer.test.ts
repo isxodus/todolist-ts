@@ -17,7 +17,7 @@ test('todolist should change Filter', () => {
     const endState = todolistsReducer(initialState, ChangeTodolistFilterAC(tdList1, filter))
     expect(endState.length).toBe(2)
     expect(endState[0].tdId).toBe(tdList1)
-    expect(JSON.stringify(endState[0])).toBe(`{"id":"${tdList1}","title":"What to learn","filter":"completed"}`)
+    expect(JSON.stringify(endState[0])).toBe(`{"tdId":"${tdList1}","title":"What to learn","filter":"completed"}`)
 })
 
 test('todolist should change Title', () => {
@@ -25,5 +25,5 @@ test('todolist should change Title', () => {
     const endState = todolistsReducer(initialState, ChangeTodolistTitleAC(tdList1, title))
     expect(endState.length).toBe(2)
     expect(endState[0].tdId).toBe(tdList1)
-    expect(JSON.stringify(endState[0])).toBe(`{"id":"${tdList1}","title":"${title}","filter":"active"}`)
+    expect(JSON.stringify(endState[0])).toBe(`{"tdId":"${tdList1}","title":"${title}","filter":"active"}`)
 })

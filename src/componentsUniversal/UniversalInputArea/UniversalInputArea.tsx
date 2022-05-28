@@ -5,7 +5,7 @@ import React, {
     KeyboardEvent,
     TextareaHTMLAttributes,
     useCallback,
-    useEffect, useMemo,
+    useEffect,
     useState
 } from 'react';
 import css from './UniversalInputArea.module.css'
@@ -110,8 +110,8 @@ const UniversalInputAreaHidden: React.FC<UniversalInputAreaPropsType> = (
         }
         if (text) onEntityFunction(text)
         onBlurFunction !== undefined ? onBlurFunction() : setText('')
-    },[text])
-    const onCancelHandler = useCallback(() => onCancelFunction ? onCancelFunction() : setText(initText),[])
+    }, [forbidEmptyInput, text, onEntityFunction, onBlurFunction])
+    const onCancelHandler = useCallback(() => onCancelFunction ? onCancelFunction() : setText(initText), [onCancelFunction, initText])
 
     //KEYPRESS CALLBACK
     const onKeyPressHandler = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -128,7 +128,7 @@ const UniversalInputAreaHidden: React.FC<UniversalInputAreaPropsType> = (
     const onBlurHandler = () => onBlurFunction ? mainEntityFunctionHandler() : true
 
 
-    console.log('UniversalInputArea was rendered with initText:',initText)
+    console.log('UniversalInputArea was rendered with initText:', initText)
     return <Box className={inputAreaStyle}>
         {type === 'input' &&
             <TextField variant={"standard"}
@@ -155,11 +155,13 @@ const UniversalInputAreaHidden: React.FC<UniversalInputAreaPropsType> = (
                        maxRows={maxRows}/>}
         {/*for buttons*/}
         <Box className={buttonAreaStyle}>
-            {localShowAddButton && <UniversalButton onEntityFunction={mainEntityFunctionHandler} muiIcon={'add'} buttonText={addButtonText}/>}
+            {localShowAddButton && <UniversalButton onEntityFunction={mainEntityFunctionHandler} muiIcon={'add'}
+                                                    buttonText={addButtonText}/>}
             {showCancelButton &&
                 <div className={cancelButtonStyle}>
-                    <UniversalButton onEntityFunction={onCancelHandler} muiIcon={'delete'} buttonText={cancelButtonText}/></div>}
+                    <UniversalButton onEntityFunction={onCancelHandler} muiIcon={'delete'}
+                                     buttonText={cancelButtonText}/></div>}
         </Box>
     </Box>
 }
-export const UniversalInputArea = React.memo (UniversalInputAreaHidden)
+export const UniversalInputArea = React.memo(UniversalInputAreaHidden)

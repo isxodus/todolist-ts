@@ -26,6 +26,7 @@ export function Todolists() {
         <Grid container spacing={3}>
             {todolists.map(todolist => {
                 let tasksForToDoList = tasks[todolist.tdId]
+                //TODO перенести в компоненту
                 if (todolist.filter === 'completed') tasksForToDoList = tasks[todolist.tdId].filter(t => t.isDone)
                 if (todolist.filter === 'active') tasksForToDoList = tasks[todolist.tdId].filter(t => !t.isDone)
 

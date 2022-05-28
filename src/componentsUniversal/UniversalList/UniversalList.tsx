@@ -6,14 +6,8 @@ import {UniversalEditableSpan} from "../UniversalEditableSpan/UniversalEditableS
 import {UniversalButton} from "../UniversalButton/UniversalButton";
 
 
-// DEFAULT PROPS
-
-// LOCAL TYPES
-
-
 // UNIVERSAL TYPE
-export type  UniversalListPropsType = {
-    inputArr: Array<any>
+type UniversalListPropsType = {
     onCheckHandler: (taskId: string) => void
     onEditHandler: (taskId: string, newText: string) => void
     onRemoveHandler: (taskId: string) => void
@@ -23,14 +17,12 @@ export type  UniversalListPropsType = {
     titleKey?: string
     checkboxKey?: string
 }
+type UniversalListPropsArrayType = UniversalListPropsType & { inputArr: Array<any> }
+type UniversalListPropsElemType = UniversalListPropsType & { elem: any }
 
 
 // COMPONENT
-const ListElem = () => {
-
-}
-
-const UniversalListHidden: React.FC<UniversalListPropsType> = (
+export const UniversalList: React.FC<UniversalListPropsArrayType> = React.memo((
     {
         inputArr,
         onCheckHandler,
@@ -41,19 +33,39 @@ const UniversalListHidden: React.FC<UniversalListPropsType> = (
         titleKey = 'title',
         checkboxKey = 'isDone'
     }) => {
-    console.log('UniversalList was rendered')
+    console.log('UniversalList was rendered with inputArr:', inputArr)
+    const onCheckHandlerCallback = useCallback(onCheckHandler, [onCheckHandler])
+    const onEditHandlerCallback = useCallback(onEditHandler, [onEditHandler])
+    const onRemoveHandlerCallback = useCallback(onRemoveHandler, [onRemoveHandler])
     return <Box>
         {inputArr?.map((elem) => {
-            const checkboxHandler =() => onCheckHandler(elem[idKey])
-            const spanHandler = (newText: string) => onEditHandler(elem[idKey], newText)
-            const deleteHandler = () => onRemoveHandler(elem[idKey])
-
-            return <Box className={showCheckbox ? css.listItem : css.listItemNoCheckbox} key={elem[idKey]}>
-                {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler}/>}
-                <UniversalEditableSpan text={elem[titleKey]} onEntityFunction={spanHandler}/>
-                <UniversalButton onEntityFunction={deleteHandler} muiIcon={'delete'}/>
-            </Box>
+            return <ListElem key={elem[idKey]}
+                             elem={elem} onCheckHandler={onCheckHandlerCallback} onEditHandler={onEditHandlerCallback}
+                             onRemoveHandler={onRemoveHandlerCallback} showCheckbox={showCheckbox}
+                             idKey={idKey} titleKey={titleKey} checkboxKey={checkboxKey}
+            />
         })}
     </Box>
-}
-export const UniversalList = React.memo(UniversalListHidden)
+})
+
+const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
+    {
+        elem,
+        onCheckHandler,
+        onEditHandler,
+        onRemoveHandler,
+        showCheckbox = true,
+        idKey = 'id',
+        titleKey = 'title',
+        checkboxKey = 'isDone'
+    }) => {
+    const checkboxHandler = useCallback(() => onCheckHandler(elem[idKey]), [onCheckHandler, elem, idKey])
+    const spanHandler = useCallback((newText: string) => onEditHandler(elem[idKey], newText), [onEditHandler, elem, idKey])
+    const deleteHandler = useCallback(() => onRemoveHandler(elem[idKey]), [onRemoveHandler, elem, idKey])
+
+    return <Box className={showCheckbox ? css.listItem : css.listItemNoCheckbox} key={elem[idKey]}>
+        {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler}/>}
+        <UniversalEditableSpan text={elem[titleKey]} onEntityFunction={spanHandler}/>
+        <UniversalButton onEntityFunction={deleteHandler} muiIcon={'delete'}/>
+    </Box>
+})

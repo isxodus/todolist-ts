@@ -35,7 +35,13 @@ type RemoveTaskAT = {
     taskId: string
 }
 //FINAL ACTION TYPE
-type ActionType = CreateTodolistAT | RemoveTodolistAT | AddTaskAT | ChangeTaskTitleAT | ChangeTaskStatusAT | RemoveTaskAT
+type ActionType =
+    CreateTodolistAT
+    | RemoveTodolistAT
+    | AddTaskAT
+    | ChangeTaskTitleAT
+    | ChangeTaskStatusAT
+    | RemoveTaskAT
 
 
 //INITIAL STATE
@@ -68,17 +74,17 @@ export const tasksReducer = (state: TaskArrayType = initialState, action: Action
             return {...state, [action.tdId]: [...state[action.tdId], {id: v1(), title: action.title, isDone: false}]}
         case 'CHANGE-TASK-TITLE':
             const changeTaskTitleCopy = {...state}
-            changeTaskTitleCopy[action.tdId] = changeTaskTitleCopy[action.tdId].map(el => {
-                if (el.id === action.taskId) el.title = action.title
-                return el
-            })
+            changeTaskTitleCopy[action.tdId] = changeTaskTitleCopy[action.tdId].map(task => task.id === action.taskId
+                ? {...task, title: action.title}
+                : task
+            )
             return changeTaskTitleCopy
         case 'CHANGE-TASK-FILTER':
             const changeTaskStatusCopy = {...state}
-            changeTaskStatusCopy[action.tdId] = changeTaskStatusCopy[action.tdId].map(el => {
-                if (el.id === action.taskId) el.isDone = !el.isDone
-                return el
-            })
+            changeTaskStatusCopy[action.tdId] = changeTaskStatusCopy[action.tdId].map(task => task.id === action.taskId
+                ? {...task, isDone: !task.isDone}
+                : task
+            )
             return changeTaskStatusCopy
         case 'REMOVE-TASK':
             const removeTaskCopy = {...state}
