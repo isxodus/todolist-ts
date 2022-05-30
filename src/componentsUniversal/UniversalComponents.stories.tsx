@@ -1,12 +1,14 @@
 import React from 'react';
-import {Basics as q} from "./Basics";
+import {UniversalInputArea} from "./UniversalInputArea/UniversalInputArea";
 
 
 // import png from "./../assets/UniversalComponentsConcept.png"
 
 export default {
     title: "q/Universal Components/Basics",
-    component: q,
+    component: UniversalInputArea,
+
+
 }
 
 export const Basics = () => <div>asd</div>
