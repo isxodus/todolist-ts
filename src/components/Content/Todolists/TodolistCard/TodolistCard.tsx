@@ -8,16 +8,11 @@ import {
     FilterValueType,
     RemoveTodolistAC,
 } from "../../../../state/todolists-reducer";
-import {
-    AddTaskAC,
-    ChangeTaskStatusAC,
-    ChangeTaskTitleAC,
-    RemoveTaskAC,
-    TaskType
-} from "../../../../state/tasks-reducer";
+import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC,} from "../../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalList} from "../../../../componentsUniversal/UniversalList/UniversalList";
 import {UniversalButtonSet} from "../../../../componentsUniversal/UniversalButtonSet/UniversalButtonSet";
+import {TaskType} from "../../../../api/todolistsApi";
 
 export type TodolistCardPropsType = {
     tdId: string

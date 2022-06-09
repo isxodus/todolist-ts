@@ -1,9 +1,8 @@
 import {v1} from "uuid";
+import {TodolistType} from "../api/todolistsApi";
 //ENTITY TYPES
 export type FilterValueType = 'all' | 'completed' | 'active'
-export type TodolistType = {
-    tdId: string
-    title: string
+export type TodolistDomainType = TodolistType & {
     filter: FilterValueType
 }
 
@@ -32,30 +31,30 @@ type ActionType = CreateTodolistAT | RemoveTodolistAT | ChangeTodolistFilterAT |
 
 
 //INITIAL STATE
-const initialState: Array<TodolistType> = [
-    {tdId: '1', title: "What to learn", filter: "active"},
-    {tdId: '2', title: "What to buy", filter: "all"},
+const initialState: Array<TodolistDomainType> = [
+    {id: '1', title: "What to learn", filter: "active", order: 0, addedDate: ''},
+    {id: '2', title: "What to buy", filter: "all", order: 0, addedDate: ''},
 ]
 //REDUCER
-export const todolistsReducer = (state: Array<TodolistType> = initialState, action: ActionType): Array<TodolistType> => {
+export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: ActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'CREATE-TODOLIST':
-            return [...state, {tdId: action.tdId, title: action.title, filter: "all"},]
+            return [...state, {id: action.tdId, title: action.title, filter: "all", order: 0, addedDate: ''},]
         case 'REMOVE-TODOLIST':
-            return [...state].filter((todolist) => (todolist.tdId !== action.tdId))
+            return [...state].filter((todolist) => (todolist.id !== action.tdId))
         case 'CHANGE-TODOLIST-FILTER':
             return state.map((todolist) => {
-                if (todolist.tdId === action.tdId) todolist.filter = action.filter
+                if (todolist.id === action.tdId) todolist.filter = action.filter
                 return todolist
             })
         case 'CHANGE-TODOLIST-TITLE':
             return state.map((todolist) => {
-                if (todolist.tdId === action.tdId) todolist.title = action.title
+                if (todolist.id === action.tdId) todolist.title = action.title
                 return todolist
             })
         default:
             return state
-        // throw new Error('invalid value in todolistsReducer fro action.type')
+        // throw new Error('invalid value in todolistsReducer for action.type')
     }
 }
 

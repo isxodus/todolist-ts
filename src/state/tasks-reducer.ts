@@ -1,12 +1,8 @@
 import {v1} from "uuid";
 import {CreateTodolistAT, RemoveTodolistAT} from "./todolists-reducer";
+import {TaskPriorities, TaskStatuses, TaskType} from "../api/todolistsApi";
 
 //ENTITY TYPES
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 export type TaskArrayType = {
     [key: string]: Array<TaskType>
 }
@@ -47,18 +43,58 @@ type ActionType =
 //INITIAL STATE
 const initialState: TaskArrayType = {
     ['1']: [
-        {id: v1(), title: "HTML", isDone: true},
-        {id: v1(), title: "CSS", isDone: true},
-        {id: v1(), title: "JavaScript", isDone: true},
-        {id: v1(), title: "React", isDone: false},
-        {id: v1(), title: "Redux", isDone: false}
+        {
+            id: v1(), title: "HTML", status: TaskStatuses.Completed, completed: true, todoListId: '1',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "CSS", status: TaskStatuses.Completed, completed: true, todoListId: '1',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "JavaScript", status: TaskStatuses.Completed, completed: true, todoListId: '1',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "React", status: TaskStatuses.New, completed: false, todoListId: '1',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "Redux", status: TaskStatuses.New, completed: false, todoListId: '1',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        }
     ],
     ['2']: [
-        {id: v1(), title: "milk", isDone: true},
-        {id: v1(), title: "bread", isDone: true},
-        {id: v1(), title: "cheese", isDone: true},
-        {id: v1(), title: "cake", isDone: false},
-        {id: v1(), title: "towel", isDone: false}
+        {
+            id: v1(), title: "milk", status: TaskStatuses.Completed, completed: true, todoListId: '2',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "bread", status: TaskStatuses.Completed, completed: true, todoListId: '2',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "cheese", status: TaskStatuses.Completed, completed: true, todoListId: '2',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "cake", status: TaskStatuses.New, completed: false, todoListId: '2',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        },
+        {
+            id: v1(), title: "towel", status: TaskStatuses.New, completed: false, todoListId: '2',
+            priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+            addedDate: '', startDate: '', deadline: ''
+        }
     ]
 }
 //REDUCER
@@ -71,7 +107,14 @@ export const tasksReducer = (state: TaskArrayType = initialState, action: Action
             delete removeCopy[action.tdId]
             return removeCopy
         case 'ADD-TASK':
-            return {...state, [action.tdId]: [...state[action.tdId], {id: v1(), title: action.title, isDone: false}]}
+            return {
+                ...state, [action.tdId]: [...state[action.tdId], {
+                    id: v1(), title: action.title,
+                    status: TaskStatuses.New, completed: false, todoListId: '2',
+                    priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                    addedDate: '', startDate: '', deadline: ''
+                }]
+            }
         case 'CHANGE-TASK-TITLE':
             const changeTaskTitleCopy = {...state}
             changeTaskTitleCopy[action.tdId] = changeTaskTitleCopy[action.tdId].map(task => task.id === action.taskId
@@ -82,7 +125,7 @@ export const tasksReducer = (state: TaskArrayType = initialState, action: Action
         case 'CHANGE-TASK-FILTER':
             const changeTaskStatusCopy = {...state}
             changeTaskStatusCopy[action.tdId] = changeTaskStatusCopy[action.tdId].map(task => task.id === action.taskId
-                ? {...task, isDone: !task.isDone}
+                ? {...task, completed: !task.completed}
                 : task
             )
             return changeTaskStatusCopy

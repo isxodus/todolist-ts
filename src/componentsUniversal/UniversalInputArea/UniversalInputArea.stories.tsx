@@ -4,6 +4,10 @@ import {Story} from "@storybook/react";
 import {Box, Grid, Paper, Typography} from "@mui/material";
 import {UniversalInputArea, UniversalInputAreaPropsType} from "./UniversalInputArea";
 
+// export default {
+//     title: "group/folder/Basics",
+//     component: UniversalInputArea,
+// }
 export default {
     title: "Universal Components/UniversalInputArea",
     component: UniversalInputArea,
@@ -24,7 +28,8 @@ export const BasicScenario = () => <div>
                 <li>type : 'textarea' | 'input'</li>
                 <li>onEntityFunction: (newText: string) {'=>'} void</li>
             </ul>
-            However, there are plenty of optional ones to fullfill different needs. This Component is used in other Universal Components
+            However, there are plenty of optional ones to fullfill different needs. This Component is used in other
+            Universal Components
         </Typography>
         <Grid container>
             <Grid item xs={6} paddingRight={1}>
@@ -87,7 +92,8 @@ export const PlaygroundForInputTODO = () => <div>
                 <Typography variant="body1" gutterBottom>
                     By default - cancel button returns initial text
                 </Typography>
-                <UniversalInputArea type={'input'} onEntityFunction={actionCallback} initText={'init text'} showCancelButton={true}/>
+                <UniversalInputArea type={'input'} onEntityFunction={actionCallback} initText={'init text'}
+                                    showCancelButton={true}/>
             </Box>
         </Paper>
     </Grid>
@@ -100,13 +106,15 @@ export const PlaygroundForInputTODO = () => <div>
                 <Typography variant="body1" gutterBottom>
                     By default - cancel button returns initial text
                 </Typography>
-                <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} initText={'init text'} showCancelButton={true}/>
+                <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} initText={'init text'}
+                                    showCancelButton={true}/>
             </Box>
         </Paper>
     </Grid>
 
     <UniversalInputArea type={'input'} onEntityFunction={actionCallback}/>
-    <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} addButtonText={"A"} showCancelButton={true}/>
+    <UniversalInputArea type={'textarea'} onEntityFunction={actionCallback} addButtonText={"A"}
+                        showCancelButton={true}/>
     <UniversalInputArea type={'input'} onEntityFunction={actionCallback} onBlurFunction={() => alert(1)}
                         showCancelButton={true}
 

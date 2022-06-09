@@ -3,11 +3,11 @@ import {
     AddTaskAC,
     ChangeTaskStatusAC,
     ChangeTaskTitleAC,
-
     RemoveTaskAC,
     TaskArrayType,
     tasksReducer,
 } from "./tasks-reducer";
+import {TaskPriorities, TaskStatuses} from "../api/todolistsApi";
 
 let tdList1: string, tdList2: string, task1: string, task2: string, task3: string, task4: string, task5: string,
     initialState: TaskArrayType
@@ -22,18 +22,58 @@ beforeEach(() => {
     task5 = v1()
     initialState = {
         [tdList1]: [
-            {id: task1, title: "HTML", isDone: true},
-            {id: task2, title: "CSS", isDone: true},
-            {id: task3, title: "JavaScript", isDone: true},
-            {id: task4, title: "React", isDone: false},
-            {id: task5, title: "Redux", isDone: false}
+            {
+                id: v1(), title: "HTML", status: TaskStatuses.Completed, completed: true, todoListId: tdList1,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "CSS", status: TaskStatuses.Completed, completed: true, todoListId: tdList1,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "JavaScript", status: TaskStatuses.Completed, completed: true, todoListId: tdList1,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "React", status: TaskStatuses.New, completed: false, todoListId: tdList1,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "Redux", status: TaskStatuses.New, completed: false, todoListId: tdList1,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            }
         ],
         [tdList2]: [
-            {id: v1(), title: "milk", isDone: true},
-            {id: v1(), title: "bread", isDone: true},
-            {id: v1(), title: "cheese", isDone: true},
-            {id: v1(), title: "cake", isDone: false},
-            {id: v1(), title: "towel", isDone: false}
+            {
+                id: v1(), title: "milk", status: TaskStatuses.Completed, completed: true, todoListId: tdList2,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "bread", status: TaskStatuses.Completed, completed: true, todoListId: tdList2,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "cheese", status: TaskStatuses.Completed, completed: true, todoListId: tdList2,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "cake", status: TaskStatuses.New, completed: false, todoListId: tdList2,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            },
+            {
+                id: v1(), title: "towel", status: TaskStatuses.New, completed: false, todoListId: tdList2,
+                priority: TaskPriorities.Middle, order: 0, description: 'AAA',
+                addedDate: '', startDate: '', deadline: ''
+            }
         ]
     }
 });
@@ -57,11 +97,11 @@ test('task status should be changed', () => {
     endState = tasksReducer(endState, ChangeTaskStatusAC(tdList1, task3))
     endState = tasksReducer(endState, ChangeTaskStatusAC(tdList1, task4))
     endState = tasksReducer(endState, ChangeTaskStatusAC(tdList1, task5))
-    expect(endState[tdList1][0].isDone).toBeFalsy()
-    expect(endState[tdList1][1].isDone).toBeFalsy()
-    expect(endState[tdList1][2].isDone).toBeFalsy()
-    expect(endState[tdList1][3].isDone).toBeTruthy()
-    expect(endState[tdList1][4].isDone).toBeTruthy()
+    expect(endState[tdList1][0].completed).toBeFalsy()
+    expect(endState[tdList1][1].completed).toBeFalsy()
+    expect(endState[tdList1][2].completed).toBeFalsy()
+    expect(endState[tdList1][3].completed).toBeTruthy()
+    expect(endState[tdList1][4].completed).toBeTruthy()
 })
 
 test('task should be removed', () => {
