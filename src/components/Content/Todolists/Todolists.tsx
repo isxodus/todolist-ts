@@ -1,8 +1,8 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "../../../state/store";
-import {CreateTodolistAC, TodolistDomainType} from "../../../state/todolists-reducer";
+import {CreateTodolistAC, fetchTodolistsTC, TodolistDomainType} from "../../../state/todolists-reducer";
 import {TaskArrayType} from "../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {TodolistCard} from "./TodolistCard/TodolistCard";
@@ -15,7 +15,9 @@ export function Todolists() {
     const tasks = useSelector<AppRootState, TaskArrayType>(state => state.tasks)
 
     const createTodolistHandler = useCallback((title: string) => dispatch(CreateTodolistAC(title)), [])
-
+    useEffect(() => {
+        dispatch(fetchTodolistsTC())
+    }, [])
 
     return <Container>
         {/*CREATE NEW TODOLIST ZONE*/}

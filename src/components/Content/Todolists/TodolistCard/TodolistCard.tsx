@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
 import css from "./TodolistCard.module.css"
 import {Box} from "@mui/material";
 import {useDispatch} from "react-redux";
@@ -8,7 +8,13 @@ import {
     FilterValueType,
     RemoveTodolistAC,
 } from "../../../../state/todolists-reducer";
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC,} from "../../../../state/tasks-reducer";
+import {
+    ChangeTaskStatusAC,
+    ChangeTaskTitleAC,
+    createTaskTC,
+    deleteTaskTC,
+    fetchTasksTC,
+} from "../../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalList} from "../../../../componentsUniversal/UniversalList/UniversalList";
 import {UniversalButtonSet} from "../../../../componentsUniversal/UniversalButtonSet/UniversalButtonSet";
@@ -32,10 +38,10 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
 
     ///TASK HANDLERS
 
-    const OnCreateTaskHandler = useCallback((title: string) => dispatch(AddTaskAC(props.tdId, title)), [dispatch, props.tdId])
+    const onCreateTaskHandler = useCallback((title: string) => dispatch(createTaskTC(props.tdId, title)), [dispatch, props.tdId])
     const onChangeTaskTitleHandler = useCallback((taskId: string, title: string) => dispatch(ChangeTaskTitleAC(props.tdId, taskId, title)), [dispatch, props.tdId])
     const onChangeTaskStatusHandler = useCallback((taskId: string) => dispatch(ChangeTaskStatusAC(props.tdId, taskId)), [dispatch, props.tdId])
-    const onRemoveTaskHandler = useCallback((taskId: string) => dispatch(RemoveTaskAC(props.tdId, taskId)), [dispatch, props.tdId])
+    const onRemoveTaskHandler = useCallback((taskId: string) => dispatch(deleteTaskTC(props.tdId, taskId)), [dispatch, props.tdId])
 
     //HEADER || TODOLIST HANDLERS
     const inputForHeader = useMemo(() => [{id: props.tdId, title: props.title}], [])
@@ -43,6 +49,9 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
     const onChangeTodolistTitleHandler = useCallback((tdId: string, title: string) => dispatch(ChangeTodolistTitleAC(tdId, title)), [dispatch])
     const onRemoveTodolistHandler = useCallback((tdId: string) => dispatch(RemoveTodolistAC(tdId)), [dispatch])
 
+    useEffect(() => {
+        dispatch(fetchTasksTC(props.tdId))
+    }, [])
 
     return <Box className={css.cardType}>
         {/*HEADER || TODOLIST TITLE*/}
@@ -56,7 +65,7 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
         {/*    <IconButton onClick={() => props.removeTodolist(props.tdId)}><Delete/></IconButton>*/}
         {/*</Grid>*/}
         {/*CREATE NEW TASK*/}
-        <UniversalInputArea type={"input"} onEntityFunction={OnCreateTaskHandler} placeholders={funnyPlaceholders}/>
+        <UniversalInputArea type={"input"} onEntityFunction={onCreateTaskHandler} placeholders={funnyPlaceholders}/>
         {/*FILTERS*/}
         <UniversalButtonSet buttonArray={filterValueArr} onEntityFunction={onChangeFilter}
                             defaultFilter={props.defaultFilterValue}/>

@@ -62,7 +62,7 @@ type ResponseType<I = {}> = {
 type TaskResponseType = {
     totalCount: number
     error: string | null
-    data: Array<TaskType>
+    items: Array<TaskType>
 }
 
 
@@ -87,7 +87,7 @@ export const todolistsApi = {
             .then(response => response.data)
     },
     createTask(tdId: string, taskTitle: string) {
-        return instance.post<ResponseType<TaskType>>(`todo-lists/${tdId}/tasks`, {title: taskTitle})
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${tdId}/tasks`, {title: taskTitle})
             .then(response => response.data)
     },
     deleteTask(tdId: string, taskId: string) {
