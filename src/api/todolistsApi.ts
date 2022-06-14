@@ -51,6 +51,14 @@ export type UpdateTaskType = {
     startDate: string
     deadline: string
 }
+export type UpdateModelTaskType = {
+    title?: string
+    description?: string
+    status?: TaskStatuses
+    priority?: TaskPriorities
+    startDate?: string
+    deadline?: string
+}
 type ResponseType<I = {}> = {
     resultCode: number
     messages: Array<string>
