@@ -2,10 +2,11 @@ import React, {useCallback, useEffect} from 'react';
 import {Container, Grid, Paper} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "../../../state/store";
-import {CreateTodolistAC, fetchTodolistsTC, TodolistDomainType} from "../../../state/todolists-reducer";
+import {createTodolistTC, fetchTodolistsTC, TodolistDomainType} from "../../../state/todolists-reducer";
 import {TaskArrayType} from "../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {TodolistCard} from "./TodolistCard/TodolistCard";
+import {TaskStatuses} from "../../../api/todolistsApi";
 
 
 export function Todolists() {
@@ -14,7 +15,7 @@ export function Todolists() {
     const todolists = useSelector<AppRootState, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootState, TaskArrayType>(state => state.tasks)
 
-    const createTodolistHandler = useCallback((title: string) => dispatch(CreateTodolistAC(title)), [])
+    const createTodolistHandler = useCallback((title: string) => dispatch(createTodolistTC(title)), [])
     useEffect(() => {
         dispatch(fetchTodolistsTC())
     }, [])
@@ -28,9 +29,9 @@ export function Todolists() {
         <Grid container spacing={3}>
             {todolists.map(todolist => {
                 let tasksForToDoList = tasks[todolist.id]
-                //TODO перенести в компоненту
-                if (todolist.filter === 'completed') tasksForToDoList = tasks[todolist.id].filter(t => t.completed)
-                if (todolist.filter === 'active') tasksForToDoList = tasks[todolist.id].filter(t => !t.completed)
+                //TODO перенести в компоненту + status
+                if (todolist.filter === 'completed') tasksForToDoList = tasks[todolist.id].filter(t => t.status === TaskStatuses.Completed)
+                if (todolist.filter === 'active') tasksForToDoList = tasks[todolist.id].filter(t => t.status === TaskStatuses.New)
 
                 return <Grid item key={todolist.id}>
                     <Paper elevation={4} style={{padding: "10px"}}>

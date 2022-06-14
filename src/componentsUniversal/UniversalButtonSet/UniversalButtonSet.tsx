@@ -23,7 +23,7 @@ const UniversalButtonSetHidden: React.FC<UniversalButtonPropsType> = (
         onEntityFunction,
         defaultFilter
     }) => {
-    console.log('UniversalButtonSet was rendered')
+    // console.log('UniversalButtonSet was rendered')
     return <ButtonGroup variant="outlined" aria-label="outlined button group">
         {buttonArray.map(el => {
             return <UniversalButton key={el} muiVariant={defaultFilter === el ? 'contained' : 'outlined'}

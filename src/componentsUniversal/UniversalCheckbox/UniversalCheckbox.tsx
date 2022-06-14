@@ -11,6 +11,10 @@ import {Checkbox} from "@mui/material";
 export type  UniversalCheckboxPropsType = {
     checked: boolean
     handler: () => void
+    /**
+     * In case CHECKED in UI should be shown not for boolean true
+     */
+    trueInd?: any
 }
 
 
@@ -18,8 +22,10 @@ export type  UniversalCheckboxPropsType = {
 export const UniversalCheckbox: React.FC<UniversalCheckboxPropsType> = React.memo((
     {
         checked,
-        handler
+        handler,
+        trueInd = true
     }) => {
-    console.log('UniversalCheckbox was rendered')
-    return <Checkbox checked={checked} onChange={handler}/>
+    // console.log('UniversalCheckbox was rendered', checked, trueInd)
+    const localChecked = checked === trueInd
+    return <Checkbox checked={localChecked} onChange={handler}/>
 })

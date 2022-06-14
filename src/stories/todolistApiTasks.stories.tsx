@@ -75,7 +75,7 @@ export const UpdateTask = () => {
     const updateTask = () => {
         todolistsApi.updateTask(todolistId, taskId,
             {
-                title: title, description: description, completed: completed, status: status, priority: priority
+                title: title, description: description, status: status, priority: priority
                 , startDate: startDate, deadline: deadline
             }).then(data => setState(data))
     }

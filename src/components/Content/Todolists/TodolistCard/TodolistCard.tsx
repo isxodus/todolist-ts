@@ -4,21 +4,21 @@ import {Box} from "@mui/material";
 import {useDispatch} from "react-redux";
 import {
     ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
+    changeTodolistTitleTC,
+    deleteTodolistTC,
     FilterValueType,
-    RemoveTodolistAC,
 } from "../../../../state/todolists-reducer";
 import {
-    ChangeTaskStatusAC,
     ChangeTaskTitleAC,
     createTaskTC,
     deleteTaskTC,
     fetchTasksTC,
+    updateTaskStatusTC,
 } from "../../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalList} from "../../../../componentsUniversal/UniversalList/UniversalList";
 import {UniversalButtonSet} from "../../../../componentsUniversal/UniversalButtonSet/UniversalButtonSet";
-import {TaskType} from "../../../../api/todolistsApi";
+import {TaskStatuses, TaskType} from "../../../../api/todolistsApi";
 
 export type TodolistCardPropsType = {
     tdId: string
@@ -40,14 +40,19 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
 
     const onCreateTaskHandler = useCallback((title: string) => dispatch(createTaskTC(props.tdId, title)), [dispatch, props.tdId])
     const onChangeTaskTitleHandler = useCallback((taskId: string, title: string) => dispatch(ChangeTaskTitleAC(props.tdId, taskId, title)), [dispatch, props.tdId])
-    const onChangeTaskStatusHandler = useCallback((taskId: string) => dispatch(ChangeTaskStatusAC(props.tdId, taskId)), [dispatch, props.tdId])
+    const onChangeTaskStatusHandler = useCallback((taskId: string,) => {
+
+        dispatch(updateTaskStatusTC(props.tdId, taskId))
+    }, [dispatch, props.tdId])
     const onRemoveTaskHandler = useCallback((taskId: string) => dispatch(deleteTaskTC(props.tdId, taskId)), [dispatch, props.tdId])
 
     //HEADER || TODOLIST HANDLERS
-    const inputForHeader = useMemo(() => [{id: props.tdId, title: props.title}], [])
+    const inputForHeader = useMemo(() => {
+        return [{id: props.tdId, title: props.title}]
+    }, [props.title])
     const todolistPlaceholderHandler = useCallback(() => true, [])
-    const onChangeTodolistTitleHandler = useCallback((tdId: string, title: string) => dispatch(ChangeTodolistTitleAC(tdId, title)), [dispatch])
-    const onRemoveTodolistHandler = useCallback((tdId: string) => dispatch(RemoveTodolistAC(tdId)), [dispatch])
+    const onChangeTodolistTitleHandler = useCallback((tdId: string, todolistTitle: string) => dispatch(changeTodolistTitleTC(tdId, todolistTitle)), [dispatch])
+    const onDeleteTodolistHandler = useCallback((tdId: string) => dispatch(deleteTodolistTC(tdId)), [dispatch])
 
     useEffect(() => {
         dispatch(fetchTasksTC(props.tdId))
@@ -58,7 +63,7 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
         <UniversalList inputArr={inputForHeader} showCheckbox={false}
                        onCheckHandler={todolistPlaceholderHandler}
                        onEditHandler={onChangeTodolistTitleHandler}
-                       onRemoveHandler={onRemoveTodolistHandler}/>
+                       onRemoveHandler={onDeleteTodolistHandler}/>
         {/*Instead of one below, I tried to use a UniversalList with one item */}
         {/*<Grid className={css.inputArea}>*/}
         {/*    <UniversalEditableSpan text={props.title} onEntityFunction={onChangeTodolistTitleHandler}/>*/}
@@ -71,7 +76,8 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
                             defaultFilter={props.defaultFilterValue}/>
         {/*TASK LIST*/}
         <UniversalList inputArr={props.tasks}
-                       onCheckHandler={onChangeTaskStatusHandler} onEditHandler={onChangeTaskTitleHandler}
+                       onCheckHandler={onChangeTaskStatusHandler} trueInd={TaskStatuses.Completed}
+                       onEditHandler={onChangeTaskTitleHandler}
                        onRemoveHandler={onRemoveTaskHandler}/>
     </Box>
 }

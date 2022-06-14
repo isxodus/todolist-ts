@@ -30,12 +30,13 @@ function UniversalEditableSpanHidden(props: UniversalEditableSpanPropsType) {
     const onBlurHandler = () => activateEditMode()
 
 
-    console.log('UniversalEditableSpan was rendered:',props.text)
+    // console.log('UniversalEditableSpan was rendered:', props.text)
     return editMode
         ? <UniversalInputArea type={'input'} initText={props.text} onEntityFunction={onEntityFunctionHandler}
                               autoFocus={true} onBlurFunction={onBlurHandler}/>
-        : <TextField variant="standard" disabled defaultValue={props.text} onDoubleClick={activateEditMode}
+        : <TextField variant="standard" disabled value={props.text} onDoubleClick={activateEditMode}
                      InputProps={{disableUnderline: true, color: 'primary'}}
                      sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>
 }
+
 export const UniversalEditableSpan = React.memo(UniversalEditableSpanHidden)

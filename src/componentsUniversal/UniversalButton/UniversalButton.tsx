@@ -39,7 +39,7 @@ const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
     }
     const localIcon = getIcon()
 
-    console.log('UniversalButton was rendered')
+    // console.log('UniversalButton was rendered')
     return <>
         {buttonText
             ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}>{buttonText}</Button>
