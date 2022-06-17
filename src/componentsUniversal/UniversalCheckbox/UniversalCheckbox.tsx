@@ -25,7 +25,7 @@ export const UniversalCheckbox: React.FC<UniversalCheckboxPropsType> = React.mem
         handler,
         trueInd = true
     }) => {
-    // console.log('UniversalCheckbox was rendered', checked, trueInd)
+    console.log('UniversalCheckbox was rendered', checked, trueInd)
     const localChecked = checked === trueInd
     return <Checkbox checked={localChecked} onChange={handler}/>
 })

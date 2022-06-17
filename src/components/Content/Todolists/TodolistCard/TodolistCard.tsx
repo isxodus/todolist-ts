@@ -40,7 +40,7 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
     //HEADER || TODOLIST HANDLERS
     const inputForHeader = useMemo(() => {
         return [{id: props.tdId, title: props.title}]
-    }, [props.title])
+    }, [props.tdId, props.title])
     const todolistPlaceholderHandler = useCallback(() => true, [])
     const onChangeTodolistTitleHandler = useCallback((tdId: string, todolistTitle: string) => dispatch(changeTodolistTitleTC(tdId, todolistTitle)), [dispatch])
     const onDeleteTodolistHandler = useCallback((tdId: string) => dispatch(deleteTodolistTC(tdId)), [dispatch])
@@ -68,8 +68,7 @@ function TodolistCardHidden(props: TodolistCardPropsType) {
         {/*TASK LIST*/}
         <UniversalList inputArr={props.tasks}
                        onCheckHandler={onChangeTaskStatusHandler}
-                       trueInd={TaskStatuses.Completed}
-                       falseInd={TaskStatuses.New}
+                       trueInd={TaskStatuses.Completed} falseInd={TaskStatuses.New}
                        onEditHandler={onChangeTaskTitleHandler}
                        onRemoveHandler={onRemoveTaskHandler}/>
     </Box>

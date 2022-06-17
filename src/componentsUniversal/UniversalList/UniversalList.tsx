@@ -51,7 +51,7 @@ export const UniversalList: React.FC<UniversalListPropsArrayType> = React.memo((
         {inputArr?.map((elem) => {
             return <ListElem key={elem[idKey]}
                              elem={elem} onCheckHandler={onCheckHandlerCallback}
-                             trueInd={trueInd}
+                             trueInd={trueInd} falseInd={falseInd}
                              onEditHandler={onEditHandlerCallback}
                              onRemoveHandler={onRemoveHandlerCallback} showCheckbox={showCheckbox}
                              idKey={idKey} titleKey={titleKey} checkboxKey={checkboxKey}
@@ -77,11 +77,12 @@ const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
     const checkboxHandler = useCallback(() => {
         //in case for UI not boolean values are used
         const oppositeStatus = elem[checkboxKey] === trueInd ? falseInd : trueInd
+        console.log('opposite status is', oppositeStatus)
         onCheckHandler(elem[idKey], oppositeStatus)
     }, [onCheckHandler, elem, idKey])
     const spanHandler = useCallback((newText: string) => onEditHandler(elem[idKey], newText), [onEditHandler, elem, idKey])
     const deleteHandler = useCallback(() => onRemoveHandler(elem[idKey]), [onRemoveHandler, elem, idKey])
-    console.log('elem: ', elem)
+    //console.log('elem: ', elem)
     return <Box className={showCheckbox ? css.listItem : css.listItemNoCheckbox} key={elem[idKey]}>
         {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler} trueInd={trueInd}/>}
         <UniversalEditableSpan text={elem[titleKey]} onEntityFunction={spanHandler}/>
