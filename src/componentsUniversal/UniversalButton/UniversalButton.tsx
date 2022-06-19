@@ -23,7 +23,8 @@ const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
         onEntityFunction,
         buttonText = '',
         muiVariant = 'outlined',
-        muiIcon
+        muiIcon,
+        disabled = false
     }) => {
     //SET ICON
     const getIcon = (): ReactNode => {
@@ -42,8 +43,9 @@ const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
     // console.log('UniversalButton was rendered')
     return <>
         {buttonText
-            ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}>{buttonText}</Button>
-            : <IconButton onClick={onEntityFunction}>{localIcon}</IconButton>
+            ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}
+                      disabled={disabled}>{buttonText}</Button>
+            : <IconButton onClick={onEntityFunction} disabled={disabled}>{localIcon}</IconButton>
         }
     </>
 }

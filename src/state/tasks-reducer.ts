@@ -1,7 +1,14 @@
 import {Dispatch} from "redux";
 import {AppRootState} from "./store";
-import {CreateTodolistAC, DeleteTodolistAC, SetTodolistsAC} from "./todolists-reducer";
 import {TaskType, todolistsApi, UpdateModelTaskType, UpdateTaskType} from "../api/todolistsApi";
+import {
+    ActionType as TodolistActionType,
+    CreateTodolistAC,
+    DeleteTodolistAC,
+    SetTodolistsAC,
+    SetTodolistStatusAC
+} from "./todolists-reducer";
+import {ActionType as ApplicationActionType, SetApplicationErrorMessageAC, SetApplicationStatusAC} from "./application-reducer";
 //INITIAL STATE
 const initialState: TaskArrayType = {}
 //REDUCER
@@ -50,10 +57,27 @@ export const UpdateTaskAC = (tdId: string, taskId: string, taskModel: UpdateTask
 
 //THUNKS
 export const fetchTasksTC: any = (tdId: string) => (dispatch: Dispatch<ActionType>) => {
-    todolistsApi.getTasks(tdId).then(tasks => dispatch(SetTasksAC(tdId, tasks.items)))
+    dispatch(SetTodolistStatusAC(tdId, 'loading', 'none'))
+    todolistsApi.getTasks(tdId)
+        .then(tasks => {
+            dispatch(SetTasksAC(tdId, tasks.items))
+            dispatch(SetTodolistStatusAC(tdId, 'success', 'none'))
+        })
 }
-export const createTaskTC: any = (tdId: string, taskTitle: string) => (dispatch: Dispatch<ActionType>) => {
-    todolistsApi.createTask(tdId, taskTitle).then(response => dispatch(CreateTaskAC(response.data.item)))
+export const createTaskTC: any = (tdId: string, taskTitle: string) => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
+    todolistsApi.createTask(tdId, taskTitle)
+        .then(response => {
+            console.log(response)
+            if (response.resultCode === 0) {
+                dispatch(CreateTaskAC(response.data.item))
+            } else {
+                dispatch(SetApplicationErrorMessageAC(response.messages[0] ? response.messages[0] : 'Cannot create a task'))
+            }
+        })
+        .catch(error => {
+            dispatch(SetApplicationErrorMessageAC('Network error has occurred'))
+            dispatch(SetApplicationStatusAC('failed'))
+        })
 }
 export const deleteTaskTC: any = (tdId: string, taskId: string) => (dispatch: Dispatch<ActionType>) => {
     todolistsApi.deleteTask(tdId, taskId).then(() => dispatch(DeleteTaskAC(tdId, taskId)))
@@ -81,6 +105,7 @@ export type TaskArrayType = {
 }
 //FINAL ACTION TYPE
 type ActionType =
+    | TodolistActionType
     | ReturnType<typeof SetTodolistsAC>
     | ReturnType<typeof CreateTodolistAC>
     | ReturnType<typeof DeleteTodolistAC>

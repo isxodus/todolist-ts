@@ -1,8 +1,13 @@
 import React from "react";
 import {Todolists} from "./Todolists/Todolists";
 
-export function Content() {
+type TodolistsPropsType = {
+    demo?: boolean
+}
+
+export function Content({demo = false, ...props}: TodolistsPropsType) {
+    console.log('content demo', demo)
     return <>
-        <Todolists/>
+        <Todolists demo={demo}/>
     </>
 }

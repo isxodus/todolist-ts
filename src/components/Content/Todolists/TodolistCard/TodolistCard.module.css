@@ -28,3 +28,7 @@
     display: grid;
     grid-template-columns: 1fr 40px;
 }
+
+.progress {
+    height: 0.01em;
+}

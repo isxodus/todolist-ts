@@ -1,16 +1,19 @@
 import React from 'react';
 import {Provider} from "react-redux";
 import {AppRootState} from "../../state/store";
-import {combineReducers, createStore} from "redux";
+import {applyMiddleware, combineReducers, createStore} from "redux";
 import {todolistsReducer} from "../../state/todolists-reducer";
 import {tasksReducer} from "../../state/tasks-reducer";
 import {v1} from "uuid";
 import {TaskPriorities, TaskStatuses} from "../../api/todolistsApi";
+import {applicationReducer} from "../../state/application-reducer";
+import thunk from "redux-thunk";
 
 
 const rootReducer = combineReducers({
         todolists: todolistsReducer,
-        tasks: tasksReducer
+        tasks: tasksReducer,
+        application: applicationReducer
     }
 )
 
@@ -18,8 +21,8 @@ const rootReducer = combineReducers({
 //INITIAL STATE
 const initialStorybookState = {
     todolists: [
-        {id: '1', title: "What to learn", filter: "active", order: 0, addedDate: ''},
-        {id: '2', title: "What to buy", filter: "all", order: 0, addedDate: ''},
+        {id: '1', title: "What to learn", order: 0, addedDate: '', filter: "active", status: 'loading', loadingStatus: 'none'},
+        {id: '2', title: "What to buy", order: 0, addedDate: '', filter: "all", status: 'success', loadingStatus: 'none'},
     ],
     tasks: {
         ['1']: [
@@ -76,9 +79,10 @@ const initialStorybookState = {
                 addedDate: '', startDate: '', deadline: ''
             }
         ]
-    }
+    },
+    application: {status: "idle", errorMessage: ''}
 }
-export const storybookStore = createStore(rootReducer, initialStorybookState as AppRootState)
+export const storybookStore = createStore(rootReducer, initialStorybookState as AppRootState, applyMiddleware(thunk))
 
 export const ReduxStoreProviderDecorator = (Story: any) => {
     return <Provider store={storybookStore}>

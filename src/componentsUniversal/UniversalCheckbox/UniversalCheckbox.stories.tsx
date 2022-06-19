@@ -19,7 +19,7 @@ export const PlaygroundForInputMer = () => {
         action('onEntityCallback was called')
     }
     return <div>
-        <UniversalCheckbox checked={checked} handler={actionCallback}/>
+        <UniversalCheckbox checked={checked} handler={actionCallback} disableCheckbox={false}/>
     </div>
 }
 

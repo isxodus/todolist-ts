@@ -7,8 +7,8 @@ beforeEach(() => {
     tdList1 = v1()
     tdList2 = v1()
     initialState = [
-        {id: tdList1, title: "What to learn", filter: "active", order: 0, addedDate: ''},
-        {id: tdList2, title: "What to buy", filter: "all", order: 0, addedDate: ''},
+        // {id: tdList1, title: "What to learn", filter: "active", order: 0, addedDate: ''},
+        // {id: tdList2, title: "What to buy", filter: "all", order: 0, addedDate: ''},
     ]
 });
 

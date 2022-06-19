@@ -11,32 +11,41 @@ import {UniversalInputArea} from "../UniversalInputArea/UniversalInputArea";
 // UNIVERSAL TYPE
 export type UniversalEditableSpanPropsType = {
     text: string
+    disableInputArea?: boolean
     onEntityFunction: (newText: string) => void
 }
 
 
 // COMPONENT
-function UniversalEditableSpanHidden(props: UniversalEditableSpanPropsType) {
+
+export const UniversalEditableSpan: React.FC<UniversalEditableSpanPropsType> = React.memo((
+        {
+            text,
+            disableInputArea = false,
+            onEntityFunction,
+
+        }) => {
 
 
-    const [editMode, setEditMode] = useState(false)
-    const activateEditMode = () => setEditMode(!editMode)
-    //const [localText, setLocalText] = useState(props.text)
-    // useEffect(() => (setLocalText(props.text)), [props.text])
+        const [editMode, setEditMode] = useState(false)
+        const activateEditMode = () => {
+            if (!disableInputArea) setEditMode(!editMode)
+        }
+        //const [localText, setLocalText] = useState(props.text)
+        // useEffect(() => (setLocalText(props.text)), [props.text])
 
-    //main callback
-    const onEntityFunctionHandler = (text: string) => props.onEntityFunction(text)
-    //onblur callback
-    const onBlurHandler = () => activateEditMode()
+        //main callback
+        const onEntityFunctionHandler = (text: string) => onEntityFunction(text)
+        //onblur callback
+        const onBlurHandler = () => activateEditMode()
 
 
-    // console.log('UniversalEditableSpan was rendered:', props.text)
-    return editMode
-        ? <UniversalInputArea type={'input'} initText={props.text} onEntityFunction={onEntityFunctionHandler}
-                              autoFocus={true} onBlurFunction={onBlurHandler}/>
-        : <TextField variant="standard" disabled value={props.text} onDoubleClick={activateEditMode}
-                     InputProps={{disableUnderline: true, color: 'primary'}}
-                     sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>
-}
-
-export const UniversalEditableSpan = React.memo(UniversalEditableSpanHidden)
+        // console.log('UniversalEditableSpan was rendered:', props.text)
+        return editMode
+            ? <UniversalInputArea type={'input'} initText={text} onEntityFunction={onEntityFunctionHandler}
+                                  autoFocus={true} onBlurFunction={onBlurHandler}/>
+            : <TextField variant="standard" disabled value={text} onDoubleClick={activateEditMode}
+                         InputProps={{disableUnderline: true, color: 'primary'}}
+                         sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>
+    }
+)

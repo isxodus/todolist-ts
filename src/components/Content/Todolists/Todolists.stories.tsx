@@ -9,4 +9,4 @@ export default {
     decorators: [ReduxStoreProviderDecorator]
 }
 
-export const BasicScenario = () => <Todolists/>
+export const BasicScenario = () => <Todolists demo={true}/>

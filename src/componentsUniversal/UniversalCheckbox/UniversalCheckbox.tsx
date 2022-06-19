@@ -15,6 +15,7 @@ export type  UniversalCheckboxPropsType = {
      * In case CHECKED in UI should be shown not for boolean true
      */
     trueInd?: any
+    disableCheckbox: boolean
 }
 
 
@@ -23,9 +24,10 @@ export const UniversalCheckbox: React.FC<UniversalCheckboxPropsType> = React.mem
     {
         checked,
         handler,
-        trueInd = true
+        trueInd = true,
+        disableCheckbox = false
     }) => {
-    console.log('UniversalCheckbox was rendered', checked, trueInd)
+    // console.log('UniversalCheckbox was rendered', checked, trueInd)
     const localChecked = checked === trueInd
-    return <Checkbox checked={localChecked} onChange={handler}/>
+    return <Checkbox checked={localChecked} onChange={handler} disabled={disableCheckbox}/>
 })

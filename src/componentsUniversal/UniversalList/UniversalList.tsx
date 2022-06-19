@@ -13,8 +13,20 @@ type UniversalListPropsType = {
     onRemoveHandler: (taskId: string) => void
 
     showCheckbox?: boolean
+    disableCheckbox?: boolean
+    disableInputArea?: boolean
+    disableButton?: boolean
+    /**
+     * In case an array consists of objects different from {id:string, title: string, status: string}
+     */
     idKey?: string
+    /**
+     * In case an array consists of objects different from {id:string, title: string, status: string}
+     */
     titleKey?: string
+    /**
+     * In case an array consists of objects different from {id:string, title: string, status: string}
+     */
     checkboxKey?: string
     /**
      * In case CHECKED in UI should be shown not for boolean true + use value in a callback
@@ -37,24 +49,31 @@ export const UniversalList: React.FC<UniversalListPropsArrayType> = React.memo((
         onEditHandler,
         onRemoveHandler,
         showCheckbox = true,
+        disableCheckbox = false,
+        disableInputArea = false,
+        disableButton = false,
         idKey = 'id',
         titleKey = 'title',
         checkboxKey = 'status',
         trueInd = true,
         falseInd = false
     }) => {
-    console.log('UniversalList was rendered with inputArr:', inputArr)
+    // console.log('UniversalList was rendered with inputArr:', inputArr)
     const onCheckHandlerCallback = useCallback(onCheckHandler, [onCheckHandler])
     const onEditHandlerCallback = useCallback(onEditHandler, [onEditHandler])
     const onRemoveHandlerCallback = useCallback(onRemoveHandler, [onRemoveHandler])
     return <Box>
         {inputArr?.map((elem) => {
             return <ListElem key={elem[idKey]}
-                             elem={elem} onCheckHandler={onCheckHandlerCallback}
-                             trueInd={trueInd} falseInd={falseInd}
-                             onEditHandler={onEditHandlerCallback}
-                             onRemoveHandler={onRemoveHandlerCallback} showCheckbox={showCheckbox}
                              idKey={idKey} titleKey={titleKey} checkboxKey={checkboxKey}
+                // checkbox
+                             elem={elem} onCheckHandler={onCheckHandlerCallback} showCheckbox={showCheckbox}
+                             trueInd={trueInd} falseInd={falseInd} disableCheckbox={disableCheckbox}
+                // inputArea
+                             onEditHandler={onEditHandlerCallback}
+                             onRemoveHandler={onRemoveHandlerCallback}
+                             disableInputArea={disableInputArea}
+                             disableButton={disableButton}
             />
         })}
     </Box>
@@ -67,6 +86,9 @@ const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
         onEditHandler,
         onRemoveHandler,
         showCheckbox = true,
+        disableCheckbox = false,
+        disableInputArea = false,
+        disableButton = false,
         idKey = 'id',
         titleKey = 'title',
         checkboxKey = 'status',
@@ -84,8 +106,9 @@ const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
     const deleteHandler = useCallback(() => onRemoveHandler(elem[idKey]), [onRemoveHandler, elem, idKey])
     //console.log('elem: ', elem)
     return <Box className={showCheckbox ? css.listItem : css.listItemNoCheckbox} key={elem[idKey]}>
-        {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler} trueInd={trueInd}/>}
-        <UniversalEditableSpan text={elem[titleKey]} onEntityFunction={spanHandler}/>
-        <UniversalButton onEntityFunction={deleteHandler} muiIcon={'delete'}/>
+        {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler} trueInd={trueInd}
+                                            disableCheckbox={disableCheckbox}/>}
+        <UniversalEditableSpan text={elem[titleKey]} onEntityFunction={spanHandler} disableInputArea={disableInputArea}/>
+        <UniversalButton onEntityFunction={deleteHandler} muiIcon={'delete'} disabled={disableButton}/>
     </Box>
 })
