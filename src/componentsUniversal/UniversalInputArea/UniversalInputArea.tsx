@@ -130,7 +130,7 @@ export const UniversalInputArea: React.FC<UniversalInputAreaPropsType> = React.m
         const onBlurHandler = () => onBlurFunction ? mainEntityFunctionHandler() : true
 
 
-        console.log('UniversalInputArea was rendered with initText:', initText, disableButton)
+        // console.log('UniversalInputArea was rendered with initText:', initText, disableButton)
         return <Box className={inputAreaStyle}>
             {type === 'input' &&
                 <TextField variant={"standard"}

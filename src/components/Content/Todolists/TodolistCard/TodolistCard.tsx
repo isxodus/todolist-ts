@@ -8,25 +8,31 @@ import {
     FilterValueType,
     TodolistDomainType,
 } from "../../../../state/todolists-reducer";
-import {createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC,} from "../../../../state/tasks-reducer";
+import {createTaskTC, deleteTaskTC, fetchTasksTC, TaskDomainType, updateTaskTC,} from "../../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalList} from "../../../../componentsUniversal/UniversalList/UniversalList";
 import {UniversalButtonSet} from "../../../../componentsUniversal/UniversalButtonSet/UniversalButtonSet";
-import {TaskStatuses, TaskType} from "../../../../api/todolistsApi";
+import {TaskStatuses} from "../../../../api/todolistsApi";
 import css from "./TodolistCard.module.css"
 
 export type TodolistCardPropsType = {
     todolist: TodolistDomainType
-    tasks: Array<TaskType>
+    tasks: Array<TaskDomainType>
 }
 
 export const TodolistCard = React.memo(function TodolistCardHidden(props: TodolistCardPropsType) {
     const dispatch = useDispatch()
     const funnyPlaceholders = useMemo(() => ["create new task", "type something", "type something cool"], [])
-    const isTodolistLoading = useMemo(() => props.todolist.status === "loading", [props.todolist.status])
+    const isTodolistLoading = useMemo(() => props.todolist.loadingStatus === "loading", [props.todolist.loadingStatus])
+    const todolistLoadingStatus = useMemo(() => {
+        //debugger
+        if (props.todolist.loadingStatusOrigin === "title") return 'span'
+        if (props.todolist.loadingStatusOrigin === "processing") return 'button'
+        return 'none'
+    }, [props.todolist.loadingStatusOrigin])
 
     //FILTER COMPONENT
-    const filterValueArr = useMemo(() => ['all', 'active', 'completed'], [])
+    const filterValueArr = useMemo(() => ['all', 'active', 'done'], [])
     const onChangeFilter = useCallback((filterValue: FilterValueType) => dispatch(ChangeTodolistFilterAC(props.todolist.id, filterValue)), [dispatch, props.todolist.id])
 
     ///TASK HANDLERS
@@ -38,8 +44,11 @@ export const TodolistCard = React.memo(function TodolistCardHidden(props: Todoli
 
     //HEADER || TODOLIST HANDLERS
     const inputForHeader = useMemo(() => {
-        return [{id: props.todolist.id, title: props.todolist.title}]
-    }, [props.todolist.id, props.todolist.title])
+        return [{
+            id: props.todolist.id, title: props.todolist.title
+            , loadingStatus: props.todolist.loadingStatus, loadingStatusOrigin: props.todolist.loadingStatusOrigin
+        }]
+    }, [props.todolist.id, props.todolist.title, props.todolist.loadingStatus, props.todolist.loadingStatusOrigin])
     const todolistPlaceholderHandler = useCallback(() => true, [])
     const onChangeTodolistTitleHandler = useCallback((tdId: string, todolistTitle: string) => dispatch(changeTodolistTitleTC(tdId, todolistTitle)), [dispatch])
     const onDeleteTodolistHandler = useCallback((tdId: string) => dispatch(deleteTodolistTC(tdId)), [dispatch])
@@ -48,15 +57,17 @@ export const TodolistCard = React.memo(function TodolistCardHidden(props: Todoli
         dispatch(fetchTasksTC(props.todolist.id))
     }, [])
 
-    return <Box css={{position: "relative"}}>
+    console.log(inputForHeader)
+    return <Box>
         {/*HEADER || TODOLIST TITLE*/}
-        <div className={css.progress}>{isTodolistLoading && <LinearProgress/>}</div>
+        <div className={css.progress}>{isTodolistLoading && todolistLoadingStatus === 'none' && <LinearProgress/>}</div>
         <UniversalList inputArr={inputForHeader} showCheckbox={false}
                        onCheckHandler={todolistPlaceholderHandler}
                        onEditHandler={onChangeTodolistTitleHandler}
                        onRemoveHandler={onDeleteTodolistHandler}
-                       disableInputArea={isTodolistLoading}
-                       disableButton={isTodolistLoading}/>
+                       disableStatus={isTodolistLoading}
+                       disableCheckboxWord={'status'} disableSpanWord={'title'} disableButtonWord={'processing'}
+        />
         {/*Instead of one below, I tried to use a UniversalList with one item, purely for an interest*/}
         {/*<Grid className={css.inputArea}>*/}
         {/*    <UniversalEditableSpan text={props.title} onEntityFunction={onChangeTodolistTitleHandler}/>*/}
@@ -70,11 +81,12 @@ export const TodolistCard = React.memo(function TodolistCardHidden(props: Todoli
                             defaultFilter={props.todolist.filter}/>
         {/*TASK LIST*/}
         <UniversalList inputArr={props.tasks}
-                       onCheckHandler={onChangeTaskStatusHandler} disableCheckbox={isTodolistLoading}
+                       onCheckHandler={onChangeTaskStatusHandler}
                        trueInd={TaskStatuses.Completed} falseInd={TaskStatuses.New}
                        onEditHandler={onChangeTaskTitleHandler}
                        onRemoveHandler={onRemoveTaskHandler}
-                       disableInputArea={isTodolistLoading}
-                       disableButton={isTodolistLoading}/>
+                       disableStatus={isTodolistLoading}
+                       disableCheckboxWord={'status'} disableSpanWord={'title'} disableButtonWord={'processing'}
+        />
     </Box>
 })

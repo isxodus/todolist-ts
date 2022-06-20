@@ -1,5 +1,5 @@
 import React, {DetailedHTMLProps, InputHTMLAttributes, ReactNode} from 'react';
-import {Button, IconButton} from "@mui/material";
+import {Button, CircularProgress, IconButton} from "@mui/material";
 import {Add, Delete} from "@mui/icons-material";
 
 
@@ -14,17 +14,19 @@ export type  UniversalButtonPropsType = DefaultButtonPropsType & {
     buttonText?: string
     muiVariant?: 'outlined' | 'text' | 'contained'
     muiIcon?: 'add' | 'delete'
+    showProgress?: boolean
 }
 
 
 // COMPONENT
-const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
+export const UniversalButton: React.FC<UniversalButtonPropsType> = React.memo((
     {
         onEntityFunction,
         buttonText = '',
         muiVariant = 'outlined',
         muiIcon,
-        disabled = false
+        disabled = false,
+        showProgress = false
     }) => {
     //SET ICON
     const getIcon = (): ReactNode => {
@@ -40,13 +42,15 @@ const UniversalButtonNoMemo: React.FC<UniversalButtonPropsType> = (
     }
     const localIcon = getIcon()
 
-    // console.log('UniversalButton was rendered')
+    //console.log('UniversalButton was rendered')
     return <>
-        {buttonText
-            ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}
-                      disabled={disabled}>{buttonText}</Button>
-            : <IconButton onClick={onEntityFunction} disabled={disabled}>{localIcon}</IconButton>
+        {disabled && showProgress
+            ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <CircularProgress size="1.6em"/></div>
+            : buttonText
+                ? <Button variant={muiVariant} startIcon={localIcon} onClick={onEntityFunction}
+                          disabled={disabled}>{buttonText}</Button>
+                : <IconButton onClick={onEntityFunction} disabled={disabled}>{localIcon}</IconButton>
         }
     </>
-}
-export const UniversalButton = React.memo(UniversalButtonNoMemo)
+})

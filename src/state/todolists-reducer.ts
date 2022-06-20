@@ -3,7 +3,7 @@ import {todolistsApi, TodolistType} from "../api/todolistsApi";
 import {
     ActionType as ApplicationActionType,
     ApplicationStatusType,
-    LoadingStatusType,
+    LoadingStatusOriginType,
     SetApplicationStatusAC
 } from "./application-reducer";
 //INITIAL STATE
@@ -12,13 +12,13 @@ const initialState: Array<TodolistDomainType> = []
 export const todolistsReducer = (state: Array<TodolistDomainType> = initialState, action: ActionType): Array<TodolistDomainType> => {
     switch (action.type) {
         case 'SET-TODOLISTS':
-            return action.todolists.map(el => ({...el, filter: 'all', status: 'idle', loadingStatus: 'none'}))
+            return action.todolists.map(el => ({...el, filter: 'all', loadingStatus: 'idle', loadingStatusOrigin: 'none'}))
         case 'SET-TODOLIST-STATUS':
             return [...state].map((td) => td.id === action.tdId
-                ? {...td, status: action.status, loadingStatus: action.loadingStatus}
+                ? {...td, loadingStatus: action.loadingStatus, loadingStatusOrigin: action.loadingStatusOrigin}
                 : td)
         case 'CREATE-TODOLIST':
-            return [{...action.todolist, filter: "all", status: 'success', loadingStatus: 'none'}, ...state]
+            return [{...action.todolist, filter: "all", loadingStatus: 'success', loadingStatusOrigin: 'none'}, ...state]
         case 'DELETE-TODOLIST':
             return [...state].filter((todolist) => (todolist.id !== action.tdId))
         case 'CHANGE-TODOLIST-TITLE':
@@ -34,8 +34,8 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
 
 //ACTION CREATORS
 export const SetTodolistsAC = (todolists: Array<TodolistType>) => ({type: 'SET-TODOLISTS', todolists: todolists} as const)
-export const SetTodolistStatusAC = (tdId: string, status: ApplicationStatusType, loadingStatus: LoadingStatusType) => {
-    return {type: 'SET-TODOLIST-STATUS', tdId, status: status, loadingStatus: loadingStatus} as const
+export const SetTodolistStatusAC = (tdId: string, loadingStatus: ApplicationStatusType, loadingStatusOrigin: LoadingStatusOriginType) => {
+    return {type: 'SET-TODOLIST-STATUS', tdId, loadingStatus: loadingStatus, loadingStatusOrigin: loadingStatusOrigin} as const
 }
 export const CreateTodolistAC = (todolist: TodolistType) => ({type: 'CREATE-TODOLIST', todolist: todolist} as const)
 export const DeleteTodolistAC = (tdId: string) => ({type: 'DELETE-TODOLIST', tdId: tdId} as const)
@@ -63,7 +63,7 @@ export const createTodolistTC: any = (todolistTitle: string) => (dispatch: Dispa
     })
 }
 export const deleteTodolistTC: any = (tdId: string) => (dispatch: Dispatch<ActionType>) => {
-    dispatch(SetTodolistStatusAC(tdId, 'loading', 'deleting'))
+    dispatch(SetTodolistStatusAC(tdId, 'loading', 'processing'))
     todolistsApi.deleteTodolist(tdId)
         .then(() => {
             dispatch(DeleteTodolistAC(tdId))
@@ -82,8 +82,8 @@ export const changeTodolistTitleTC: any = (tdId: string, todolistTitle: string) 
 export type FilterValueType = 'all' | 'completed' | 'active'
 export type TodolistDomainType = TodolistType & {
     filter: FilterValueType
-    status: ApplicationStatusType
-    loadingStatus: LoadingStatusType
+    loadingStatus: ApplicationStatusType
+    loadingStatusOrigin: LoadingStatusOriginType
 }
 //FINAL ACTION TYPE
 export type ActionType =

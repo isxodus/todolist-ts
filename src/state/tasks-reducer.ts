@@ -8,7 +8,13 @@ import {
     SetTodolistsAC,
     SetTodolistStatusAC
 } from "./todolists-reducer";
-import {ActionType as ApplicationActionType, SetApplicationErrorMessageAC, SetApplicationStatusAC} from "./application-reducer";
+import {
+    ActionType as ApplicationActionType,
+    ApplicationStatusType,
+    LoadingStatusOriginType,
+    SetApplicationErrorMessageAC,
+    SetApplicationStatusAC
+} from "./application-reducer";
 //INITIAL STATE
 const initialState: TaskArrayType = {}
 //REDUCER
@@ -28,10 +34,30 @@ export const tasksReducer = (state: TaskArrayType = initialState, action: Action
             return stateCopy
         }
         //TASKS RELATED
-        case 'SET-TASKS':
-            return {...state, [action.tdId]: action.tasks}
+        case 'SET-TASKS': {
+            const actionTasks: Array<TaskDomainType> = action.tasks.map(task => ({
+                ...task,
+                loadingStatus: 'idle',
+                loadingStatusOrigin: 'none'
+            }))
+            return {...state, [action.tdId]: actionTasks}
+        }
+        case 'SET-TASK-STATUS': {
+            return {
+                ...state, [action.tdId]: state[action.tdId].map(task => task.id === action.taskId
+                    ? {...task, loadingStatus: action.loadingStatus, loadingStatusOrigin: action.loadingStatusOrigin}
+                    : task)
+            }
+        }
         case 'CREATE-TASK':
-            return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
+            return {
+                ...state,
+                [action.task.todoListId]: [{
+                    ...action.task,
+                    loadingStatus: 'idle',
+                    loadingStatusOrigin: 'none'
+                }, ...state[action.task.todoListId]]
+            }
         case 'DELETE-TASK':
             return {...state, [action.tdId]: state[action.tdId].filter((task) => (task.id !== action.taskId))}
         case 'UPDATE-TASK':
@@ -48,6 +74,15 @@ export const tasksReducer = (state: TaskArrayType = initialState, action: Action
 
 //ACTION CREATORS
 export const SetTasksAC = (tdId: string, tasks: Array<TaskType>) => ({type: 'SET-TASKS', tdId: tdId, tasks: tasks} as const)
+export const SetTaskStatusAC = (tdId: string, taskId: string, loadingStatus: ApplicationStatusType, loadingStatusOrigin: LoadingStatusOriginType) => {
+    return {
+        type: 'SET-TASK-STATUS',
+        tdId,
+        taskId,
+        loadingStatus: loadingStatus,
+        loadingStatusOrigin: loadingStatusOrigin
+    } as const
+}
 export const CreateTaskAC = (task: TaskType) => ({type: 'CREATE-TASK', task: task} as const)
 export const DeleteTaskAC = (tdId: string, taskId: string) => ({type: 'DELETE-TASK', tdId: tdId, taskId: taskId} as const)
 export const UpdateTaskAC = (tdId: string, taskId: string, taskModel: UpdateTaskType) => {
@@ -84,6 +119,7 @@ export const deleteTaskTC: any = (tdId: string, taskId: string) => (dispatch: Di
 }
 export const updateTaskTC: any = (tdId: string, taskId: string, reducerModel: UpdateModelTaskType) => {
     return (dispatch: Dispatch<ActionType>, getState: () => AppRootState) => {
+        dispatch(SetTaskStatusAC(tdId, taskId, 'loading', 'title'))
         const task = getState().tasks[tdId].find(task => task.id === taskId)
         if (!task) {
             console.warn('updateTaskStatusTC warning, no task found')
@@ -94,19 +130,28 @@ export const updateTaskTC: any = (tdId: string, taskId: string, reducerModel: Up
             title: task.title, description: task.description, status: task.status,
             ...reducerModel
         }
-        todolistsApi.updateTask(tdId, taskId, apiModel).then(() => dispatch(UpdateTaskAC(tdId, taskId, apiModel)))
+        todolistsApi.updateTask(tdId, taskId, apiModel)
+            .then(() => {
+                dispatch(UpdateTaskAC(tdId, taskId, apiModel))
+                dispatch(SetTaskStatusAC(tdId, taskId, 'success', 'none'))
+            })
     }
 }
 
 
 //ENTITY-STATE TYPES
 export type TaskArrayType = {
-    [key: string]: Array<TaskType>
+    [key: string]: Array<TaskDomainType>
+}
+export type TaskDomainType = TaskType & {
+    loadingStatus: ApplicationStatusType
+    loadingStatusOrigin: LoadingStatusOriginType
 }
 //FINAL ACTION TYPE
 type ActionType =
     | TodolistActionType
     | ReturnType<typeof SetTodolistsAC>
+    | ReturnType<typeof SetTaskStatusAC>
     | ReturnType<typeof CreateTodolistAC>
     | ReturnType<typeof DeleteTodolistAC>
     | ReturnType<typeof SetTasksAC>

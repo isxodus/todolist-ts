@@ -14,7 +14,6 @@ type TodolistsPropsType = {
 export function App({demo = false, ...props}: TodolistsPropsType) {
     const loadingStatus = useSelector<AppRootState, string>(state => state.application.status)
     const showProgress = loadingStatus === 'loading'
-    console.log('app demo:', demo)
     return <div className="App">
         <CustomizedSnackbars></CustomizedSnackbars>
         <MenuToolbar/>

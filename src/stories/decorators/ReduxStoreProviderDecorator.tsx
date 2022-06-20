@@ -21,62 +21,68 @@ const rootReducer = combineReducers({
 //INITIAL STATE
 const initialStorybookState = {
     todolists: [
-        {id: '1', title: "What to learn", order: 0, addedDate: '', filter: "active", status: 'loading', loadingStatus: 'none'},
-        {id: '2', title: "What to buy", order: 0, addedDate: '', filter: "all", status: 'success', loadingStatus: 'none'},
+        {
+            id: '1', title: "What to learn", order: 0, addedDate: '', filter: "active", loadingStatus: 'loading'
+            , loadingStatusOrigin: 'none'
+        },
+        {
+            id: '2', title: "What to buy", order: 0, addedDate: '', filter: "all"
+            , loadingStatus: 'success', loadingStatusOrigin: 'none'
+        },
     ],
     tasks: {
         ['1']: [
             {
                 id: v1(), title: "HTML", status: TaskStatuses.Completed, completed: true, todoListId: '1',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "CSS", status: TaskStatuses.Completed, completed: true, todoListId: '1',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "JavaScript", status: TaskStatuses.Completed, completed: true, todoListId: '1',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "React", status: TaskStatuses.New, completed: false, todoListId: '1',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "Redux", status: TaskStatuses.New, completed: false, todoListId: '1',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             }
         ],
         ['2']: [
             {
                 id: v1(), title: "milk", status: TaskStatuses.Completed, completed: true, todoListId: '2',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "bread", status: TaskStatuses.Completed, completed: true, todoListId: '2',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "cheese", status: TaskStatuses.Completed, completed: true, todoListId: '2',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "cake", status: TaskStatuses.New, completed: false, todoListId: '2',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "towel", status: TaskStatuses.New, completed: false, todoListId: '2',
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             }
         ]
     },

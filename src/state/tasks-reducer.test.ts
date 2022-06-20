@@ -18,54 +18,54 @@ beforeEach(() => {
             {
                 id: v1(), title: "HTML", status: TaskStatuses.Completed, todoListId: tdList1,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "CSS", status: TaskStatuses.Completed, todoListId: tdList1,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "JavaScript", status: TaskStatuses.Completed, todoListId: tdList1,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "React", status: TaskStatuses.New, todoListId: tdList1,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "Redux", status: TaskStatuses.New, todoListId: tdList1,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             }
         ],
         [tdList2]: [
             {
                 id: v1(), title: "milk", status: TaskStatuses.Completed, todoListId: tdList2,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "bread", status: TaskStatuses.Completed, todoListId: tdList2,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "cheese", status: TaskStatuses.Completed, todoListId: tdList2,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "cake", status: TaskStatuses.New, todoListId: tdList2,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             },
             {
                 id: v1(), title: "towel", status: TaskStatuses.New, todoListId: tdList2,
                 priority: TaskPriorities.Middle, order: 0, description: 'AAA',
-                addedDate: '', startDate: '', deadline: ''
+                addedDate: '', startDate: '', deadline: '', loadingStatus: 'success', loadingStatusOrigin: 'none'
             }
         ]
     }

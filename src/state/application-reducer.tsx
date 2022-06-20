@@ -29,7 +29,7 @@ export const SetApplicationErrorMessageAC = (errorMessage: string | null) => ({
 
 //ENTITY-STATE TYPES
 export type ApplicationStatusType = 'idle' | 'loading' | 'success' | 'failed'
-export type LoadingStatusType = 'none' | 'status' | 'title' | 'deleting'
+export type LoadingStatusOriginType = 'none' | 'status' | 'title' | 'processing'
 //FINAL ACTION TYPE
 export type ActionType =
     | ReturnType<typeof SetApplicationStatusAC>

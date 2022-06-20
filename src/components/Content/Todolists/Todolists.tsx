@@ -37,7 +37,7 @@ export function Todolists({demo = false, ...props}: TodolistsPropsType) {
                 if (todolist.filter === 'completed') tasksForToDoList = tasks[todolist.id].filter(t => t.status === TaskStatuses.Completed)
                 if (todolist.filter === 'active') tasksForToDoList = tasks[todolist.id].filter(t => t.status === TaskStatuses.New)
 
-                return <Grid item key={todolist.id}>
+                return <Grid item xs={4} key={todolist.id}>
                     <Paper elevation={4}
                            style={{padding: "10px", paddingTop: "4px"}}>
                         <TodolistCard todolist={todolist}

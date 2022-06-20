@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {TextField} from "@mui/material";
+import {LinearProgress, TextField} from "@mui/material";
 import {UniversalInputArea} from "../UniversalInputArea/UniversalInputArea";
 
 
@@ -13,6 +13,7 @@ export type UniversalEditableSpanPropsType = {
     text: string
     disableInputArea?: boolean
     onEntityFunction: (newText: string) => void
+    showProgress?: boolean
 }
 
 
@@ -23,7 +24,7 @@ export const UniversalEditableSpan: React.FC<UniversalEditableSpanPropsType> = R
             text,
             disableInputArea = false,
             onEntityFunction,
-
+            showProgress = false
         }) => {
 
 
@@ -40,12 +41,15 @@ export const UniversalEditableSpan: React.FC<UniversalEditableSpanPropsType> = R
         const onBlurHandler = () => activateEditMode()
 
 
-        // console.log('UniversalEditableSpan was rendered:', props.text)
-        return editMode
-            ? <UniversalInputArea type={'input'} initText={text} onEntityFunction={onEntityFunctionHandler}
-                                  autoFocus={true} onBlurFunction={onBlurHandler}/>
-            : <TextField variant="standard" disabled value={text} onDoubleClick={activateEditMode}
-                         InputProps={{disableUnderline: true, color: 'primary'}}
-                         sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>
+        console.log('UniversalEditableSpan was rendered:', showProgress)
+        return <div>
+            {editMode
+                ? <UniversalInputArea type={'input'} initText={text} onEntityFunction={onEntityFunctionHandler}
+                                      autoFocus={true} onBlurFunction={onBlurHandler}/>
+                : <TextField variant="standard" disabled value={text} onDoubleClick={activateEditMode}
+                             InputProps={{disableUnderline: true, color: 'primary'}}
+                             sx={{"& .MuiInputBase-input.Mui-disabled": {WebkitTextFillColor: "black",},}}/>}
+            {showProgress && <LinearProgress/>}
+        </div>
     }
 )

@@ -1,5 +1,7 @@
 .inputArea {
     display: grid;
+    justify-content: center;
+    align-content: center;
 }
 
 .btn0 {

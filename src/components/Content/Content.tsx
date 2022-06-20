@@ -6,7 +6,6 @@ type TodolistsPropsType = {
 }
 
 export function Content({demo = false, ...props}: TodolistsPropsType) {
-    console.log('content demo', demo)
     return <>
         <Todolists demo={demo}/>
     </>

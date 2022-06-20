@@ -1,9 +1,11 @@
 .listItem {
     display: grid;
     grid-template-columns: 40px 1fr 40px;
+    grid-template-rows: 40px;
 }
 
 .listItemNoCheckbox {
     display: grid;
     grid-template-columns: 1fr 40px;
+    grid-template-rows: 40px;
 }
