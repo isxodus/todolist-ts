@@ -1,5 +1,5 @@
 import React from 'react';
-import {Checkbox} from "@mui/material";
+import {Checkbox, CircularProgress} from "@mui/material";
 
 
 // DEFAULT PROPS
@@ -29,11 +29,12 @@ export const UniversalCheckbox: React.FC<UniversalCheckboxPropsType> = React.mem
         disableCheckbox = false,
         showProgress = false
     }) => {
-    // console.log('UniversalCheckbox was rendered', checked, trueInd)
+    console.log('UniversalCheckbox was rendered', checked, trueInd)
     const localChecked = checked === trueInd
     return <>
         {disableCheckbox && showProgress
-            ? <div></div>
+            ? <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <CircularProgress size="1.6em"/></div>
             : <Checkbox checked={localChecked} onChange={handler} disabled={disableCheckbox}/>}
     </>
 })

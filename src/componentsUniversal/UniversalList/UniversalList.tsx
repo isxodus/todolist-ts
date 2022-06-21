@@ -124,14 +124,17 @@ const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
         idKey = 'id',
         titleKey = 'title',
         checkboxKey = 'status',
+        // other values for boolean
         trueInd = true,
         falseInd = false
     }) => {
 
-    const localDisableStatus = useMemo(() => disableStatus, [disableStatus])
+
     const checkboxProgressStatus = useMemo(() => elem[loadingStatusOriginKey] === disableCheckboxWord, [elem])
     const checkboxEditableSpanStatus = useMemo(() => elem[loadingStatusOriginKey] === disableSpanWord, [elem])
     const checkboxButtonStatus = useMemo(() => elem[loadingStatusOriginKey] === disableButtonWord, [elem])
+    const localDisableStatus = useMemo(() => disableStatus || checkboxProgressStatus || checkboxEditableSpanStatus || checkboxButtonStatus
+        , [disableStatus, checkboxProgressStatus, checkboxEditableSpanStatus, checkboxButtonStatus])
 
     const checkboxHandler = useCallback(() => {
         //in case for UI not boolean values are used
@@ -142,7 +145,7 @@ const ListElem: React.FC<UniversalListPropsElemType> = React.memo((
     const spanHandler = useCallback((newText: string) => onEditHandler(elem[idKey], newText), [onEditHandler, elem, idKey])
     const deleteHandler = useCallback(() => onRemoveHandler(elem[idKey]), [onRemoveHandler, elem, idKey])
 
-    console.log('now', elem[loadingStatusOriginKey], disableSpanWord, checkboxEditableSpanStatus)
+    console.log('now', elem[loadingStatusOriginKey], localDisableStatus, checkboxProgressStatus)
     return <Box className={showCheckbox ? css.listItem : css.listItemNoCheckbox} key={elem[idKey]}>
         {showCheckbox && <UniversalCheckbox checked={elem[checkboxKey]} handler={checkboxHandler} trueInd={trueInd}
                                             disableCheckbox={localDisableStatus} showProgress={checkboxProgressStatus}/>}

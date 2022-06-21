@@ -8,7 +8,14 @@ import {
     FilterValueType,
     TodolistDomainType,
 } from "../../../../state/todolists-reducer";
-import {createTaskTC, deleteTaskTC, fetchTasksTC, TaskDomainType, updateTaskTC,} from "../../../../state/tasks-reducer";
+import {
+    createTaskTC,
+    deleteTaskTC,
+    fetchTasksTC,
+    TaskDomainType,
+    updateTaskStatusTC,
+    updateTaskTitleTC,
+} from "../../../../state/tasks-reducer";
 import {UniversalInputArea} from "../../../../componentsUniversal/UniversalInputArea/UniversalInputArea";
 import {UniversalList} from "../../../../componentsUniversal/UniversalList/UniversalList";
 import {UniversalButtonSet} from "../../../../componentsUniversal/UniversalButtonSet/UniversalButtonSet";
@@ -38,8 +45,8 @@ export const TodolistCard = React.memo(function TodolistCardHidden(props: Todoli
     ///TASK HANDLERS
 
     const onCreateTaskHandler = useCallback((title: string) => dispatch(createTaskTC(props.todolist.id, title)), [dispatch, props.todolist.id])
-    const onChangeTaskTitleHandler = useCallback((taskId: string, title: string) => dispatch(updateTaskTC(props.todolist.id, taskId, {title: title})), [dispatch, props.todolist.id])
-    const onChangeTaskStatusHandler = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskTC(props.todolist.id, taskId, {status: status})), [dispatch, props.todolist.id])
+    const onChangeTaskTitleHandler = useCallback((taskId: string, title: string) => dispatch(updateTaskTitleTC(props.todolist.id, taskId, {title: title})), [dispatch, props.todolist.id])
+    const onChangeTaskStatusHandler = useCallback((taskId: string, status: TaskStatuses) => dispatch(updateTaskStatusTC(props.todolist.id, taskId, {status: status})), [dispatch, props.todolist.id])
     const onRemoveTaskHandler = useCallback((taskId: string) => dispatch(deleteTaskTC(props.todolist.id, taskId)), [dispatch, props.todolist.id])
 
     //HEADER || TODOLIST HANDLERS

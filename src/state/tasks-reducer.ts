@@ -8,13 +8,8 @@ import {
     SetTodolistsAC,
     SetTodolistStatusAC
 } from "./todolists-reducer";
-import {
-    ActionType as ApplicationActionType,
-    ApplicationStatusType,
-    LoadingStatusOriginType,
-    SetApplicationErrorMessageAC,
-    SetApplicationStatusAC
-} from "./application-reducer";
+import {ActionType as ApplicationActionType, ApplicationStatusType, LoadingStatusOriginType} from "./application-reducer";
+import {handleAppError, handleAppFetchError, handleNetworkError} from "../application/utilsErrorHandling/utilsErrorHandling";
 //INITIAL STATE
 const initialState: TaskArrayType = {}
 //REDUCER
@@ -95,31 +90,37 @@ export const fetchTasksTC: any = (tdId: string) => (dispatch: Dispatch<ActionTyp
     dispatch(SetTodolistStatusAC(tdId, 'loading', 'none'))
     todolistsApi.getTasks(tdId)
         .then(tasks => {
-            dispatch(SetTasksAC(tdId, tasks.items))
-            dispatch(SetTodolistStatusAC(tdId, 'success', 'none'))
+            debugger
+            if (!tasks.error) {
+                dispatch(SetTasksAC(tdId, tasks.items))
+                dispatch(SetTodolistStatusAC(tdId, 'success', 'none'))
+            } else handleAppFetchError(tasks, dispatch)
         })
+        .catch(error => handleNetworkError(error, dispatch))
 }
 export const createTaskTC: any = (tdId: string, taskTitle: string) => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
     todolistsApi.createTask(tdId, taskTitle)
         .then(response => {
-            console.log(response)
-            if (response.resultCode === 0) {
-                dispatch(CreateTaskAC(response.data.item))
-            } else {
-                dispatch(SetApplicationErrorMessageAC(response.messages[0] ? response.messages[0] : 'Cannot create a task'))
-            }
+            if (response.resultCode === 0) dispatch(CreateTaskAC(response.data.item))
+            else handleAppError(response, dispatch)
         })
-        .catch(error => {
-            dispatch(SetApplicationErrorMessageAC('Network error has occurred'))
-            dispatch(SetApplicationStatusAC('failed'))
-        })
+        .catch(error => handleNetworkError(error, dispatch))
 }
 export const deleteTaskTC: any = (tdId: string, taskId: string) => (dispatch: Dispatch<ActionType>) => {
-    todolistsApi.deleteTask(tdId, taskId).then(() => dispatch(DeleteTaskAC(tdId, taskId)))
+    dispatch(SetTaskStatusAC(tdId, taskId, 'loading', 'processing'))
+    todolistsApi.deleteTask(tdId, taskId)
+        .then((response) => {
+            if (response.resultCode === 0) {
+                dispatch(DeleteTaskAC(tdId, taskId))
+                dispatch(SetTaskStatusAC(tdId, taskId, 'success', 'none'))
+            } else handleAppError(response, dispatch)
+        })
+        .catch(error => handleNetworkError(error, dispatch))
 }
-export const updateTaskTC: any = (tdId: string, taskId: string, reducerModel: UpdateModelTaskType) => {
+export const updateTaskTC: any = (tdId: string, taskId: string, reducerModel: UpdateModelTaskType
+    , loadingStatus: ApplicationStatusType, loadingStatusOrigin: LoadingStatusOriginType) => {
     return (dispatch: Dispatch<ActionType>, getState: () => AppRootState) => {
-        dispatch(SetTaskStatusAC(tdId, taskId, 'loading', 'title'))
+        dispatch(SetTaskStatusAC(tdId, taskId, loadingStatus, loadingStatusOrigin))
         const task = getState().tasks[tdId].find(task => task.id === taskId)
         if (!task) {
             console.warn('updateTaskStatusTC warning, no task found')
@@ -131,11 +132,20 @@ export const updateTaskTC: any = (tdId: string, taskId: string, reducerModel: Up
             ...reducerModel
         }
         todolistsApi.updateTask(tdId, taskId, apiModel)
-            .then(() => {
-                dispatch(UpdateTaskAC(tdId, taskId, apiModel))
-                dispatch(SetTaskStatusAC(tdId, taskId, 'success', 'none'))
+            .then((response) => {
+                if (response.resultCode === 0) {
+                    dispatch(UpdateTaskAC(tdId, taskId, apiModel))
+                    dispatch(SetTaskStatusAC(tdId, taskId, 'success', 'none'))
+                } else handleAppError(response, dispatch)
             })
+            .catch(error => handleNetworkError(error, dispatch))
     }
+}
+export const updateTaskTitleTC: any = (tdId: string, taskId: string, reducerModel: UpdateModelTaskType) => {
+    return (dispatch: Dispatch<ActionType>) => dispatch(updateTaskTC(tdId, taskId, reducerModel, 'loading', 'title'))
+}
+export const updateTaskStatusTC: any = (tdId: string, taskId: string, reducerModel: UpdateModelTaskType) => {
+    return (dispatch: Dispatch<ActionType>) => dispatch(updateTaskTC(tdId, taskId, reducerModel, 'loading', 'status'))
 }
 
 
@@ -148,7 +158,7 @@ export type TaskDomainType = TaskType & {
     loadingStatusOrigin: LoadingStatusOriginType
 }
 //FINAL ACTION TYPE
-type ActionType =
+export type ActionType =
     | TodolistActionType
     | ReturnType<typeof SetTodolistsAC>
     | ReturnType<typeof SetTaskStatusAC>

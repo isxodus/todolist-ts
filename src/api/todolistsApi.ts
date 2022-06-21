@@ -87,13 +87,13 @@ export type UpdateModelTaskType = {
     startDate?: string
     deadline?: string
 }
-type ResponseType<I = {}> = {
+export type ResponseType<I = {}> = {
     resultCode: number
     messages: Array<string>
     fieldsErrors: Array<string>
     data: I
 }
-type TaskResponseType = {
+export type TaskResponseType = {
     totalCount: number
     error: string | null
     items: Array<TaskType>
