@@ -1,5 +1,6 @@
 import {Dispatch} from "redux";
 import {ResponseType, TaskResponseType} from "../../api/todolistsApi";
+import {OperationResult} from "../../api/authApi";
 import {
     ActionType as ApplicationActionType,
     SetApplicationErrorMessageAC,
@@ -8,7 +9,7 @@ import {
 import {ActionType as TaskActionType} from "../../state/tasks-reducer";
 
 
-export const handleAppError = <D>(response: ResponseType<D>, dispatch: Dispatch<TaskActionType | ApplicationActionType>) => {
+export const handleAppError = <D>(response: ResponseType<D> | OperationResult<D>, dispatch: Dispatch<TaskActionType | ApplicationActionType>) => {
     if (response.messages.length > 0) {
         dispatch(SetApplicationErrorMessageAC(response.messages[0]))
     } else {

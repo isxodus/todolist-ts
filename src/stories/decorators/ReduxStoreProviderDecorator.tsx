@@ -86,7 +86,8 @@ const initialStorybookState = {
             }
         ]
     },
-    application: {status: "idle", errorMessage: ''}
+    application: {status: "idle", errorMessage: '', isInitialized: false},
+    auth: {isLoggedIn: true}
 }
 export const storybookStore = createStore(rootReducer, initialStorybookState as AppRootState, applyMiddleware(thunk))
 

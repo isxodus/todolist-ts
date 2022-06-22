@@ -90,7 +90,6 @@ export const fetchTasksTC: any = (tdId: string) => (dispatch: Dispatch<ActionTyp
     dispatch(SetTodolistStatusAC(tdId, 'loading', 'none'))
     todolistsApi.getTasks(tdId)
         .then(tasks => {
-            debugger
             if (!tasks.error) {
                 dispatch(SetTasksAC(tdId, tasks.items))
                 dispatch(SetTodolistStatusAC(tdId, 'success', 'none'))
