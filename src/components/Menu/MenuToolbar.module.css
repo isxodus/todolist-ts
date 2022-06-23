@@ -1,0 +1,14 @@
+.grid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr;
+}
+
+.profileIcon {
+    /*grid-column: 1 / 2;*/
+    /*grid-row: 2;*/
+    position: sticky;
+    top: 0;
+    left: 0;
+    justify-self: right;
+}

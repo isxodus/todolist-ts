@@ -6,10 +6,14 @@ export const authApi = {
         return instance.get<OperationResult<{ id: number, email: string, login: string }>>('auth/me')
             .then(response => response.data)
     },
-    login(data: ApiParamsType) {
+    logIn(data: ApiParamsType) {
         return instance.post<OperationResult<{ userId?: number }>>('auth/login', data)
             .then(response => response.data)
     },
+    logOut() {
+        return instance.delete<OperationResult<{ userId?: number }>>('auth/login')
+            .then(response => response.data)
+    }
 }
 
 export type ApiParamsType = {

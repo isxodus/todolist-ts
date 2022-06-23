@@ -47,7 +47,7 @@ export const ChangeTodolistFilterAC = (tdId: string, filter: FilterValueType) =>
 }
 
 
-//THUNKS + todo Dispatch
+//THUNKS + todo Dispatch + todo error handling
 export const fetchTodolistsTC: any = () => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
     dispatch(SetApplicationStatusAC('loading'))
     todolistsApi.getTodolists().then(todolists => {

@@ -27,13 +27,23 @@ export const setIsLoggedInAC = (isLoggedIn: boolean) => {
 
 
 //THUNKS
-
-export const loginTC: any = (data: ApiParamsType) => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
+export const logInTC: any = (data: ApiParamsType) => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
     dispatch(SetApplicationStatusAC('loading'))
-    authApi.login(data)
+    authApi.logIn(data)
         .then(response => {
             if (response.resultCode === 0) {
                 dispatch(setIsLoggedInAC(true))
+                dispatch(SetApplicationStatusAC('success'))
+            } else handleAppError(response, dispatch)
+        })
+        .catch(error => handleNetworkError(error, dispatch))
+}
+export const logOutTC: any = () => (dispatch: Dispatch<ActionType | ApplicationActionType>) => {
+    dispatch(SetApplicationStatusAC('loading'))
+    authApi.logOut()
+        .then(response => {
+            if (response.resultCode === 0) {
+                dispatch(setIsLoggedInAC(false))
                 dispatch(SetApplicationStatusAC('success'))
             } else handleAppError(response, dispatch)
         })

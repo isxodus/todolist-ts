@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
-import {loginTC} from "./auth-reducer";
+import {logInTC} from "./auth-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootState} from "../../state/store";
 import {Navigate} from "react-router-dom";
@@ -23,7 +23,7 @@ export const Auth = () => {
             rememberMe: isLoggedIn
         },
         onSubmit: (values) => {
-            dispatch(loginTC(values))
+            dispatch(logInTC(values))
         },
         validate: (values) => {
             if (!values.email) return {email: "Please fill your email"}
@@ -31,7 +31,7 @@ export const Auth = () => {
         }
     })
 
-    debugger
+
     if (isLoggedIn) return <Navigate to={"/"}/>
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>

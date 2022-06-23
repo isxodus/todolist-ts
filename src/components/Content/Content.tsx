@@ -1,19 +1,16 @@
 import React from "react";
 import {Todolists} from "./Todolists/Todolists";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {Auth} from "../../application/Auth/Auth";
+import {Navigate, Route, Routes} from "react-router-dom";
 
 type TodolistsPropsType = {
     demo?: boolean
 }
 
 export function Content({demo = false, ...props}: TodolistsPropsType) {
-    return <BrowserRouter>
-        <Routes>
-            <Route path={"/"} element={<Todolists demo={demo}/>}/>
-            <Route path={"/login"} element={<Auth/>}/>
-            <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>}/>
-        </Routes>
+    return <Routes>
+        <Route path={"/login"} element={<Navigate to="/" replace={true}/>}/>
+        <Route path={"/"} element={<Todolists demo={demo}/>}/>
+        <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>}/>
+    </Routes>
 
-    </BrowserRouter>
 }
